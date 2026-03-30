@@ -1,0 +1,36 @@
+name: Run MLB Model Daily
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 11 AM EST
+  workflow_dispatch:
+
+jobs:
+  run-model:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run settle bets
+      run: python settle_bets_github.py
+
+    - name: Pull props
+      env:
+        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+      run: python pull_props_github.py
+
+    - name: Update dataset
+      run: python update_dataset_github.py
+
+    - name: Run live predictions
+      run: python live_predictions_github.py
