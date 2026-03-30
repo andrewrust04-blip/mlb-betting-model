@@ -97,7 +97,9 @@ def grade_bet(actual_strikeouts, line, bet_side):
 # =============================================================================
 
 if not os.path.exists(BET_LOG_PATH):
-    raise FileNotFoundError(f"bet_log.csv not found: {BET_LOG_PATH}")
+    print(f"bet_log.csv not found: {BET_LOG_PATH}")
+    print("No existing bet log yet. Skipping settlement.")
+    raise SystemExit
 
 print(f"Loading bet log from: {BET_LOG_PATH}")
 bet_log = pd.read_csv(BET_LOG_PATH)
