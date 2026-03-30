@@ -1,0 +1,9 @@
+pandas
+numpy
+requests
+statsmodels
+pybaseball
+scikit-learn
+pyarrow
+openpyxl
+xlsxwriter
