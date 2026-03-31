@@ -1,13 +1,11 @@
 name: Run MLB Model Daily
 
-# trigger refresh
-
 permissions:
   contents: write
 
 on:
   schedule:
-    - cron: '20 14 * * *'
+    - cron: '26 14 * * *'  # 10:26 AM Eastern
   workflow_dispatch:
 
 jobs:
