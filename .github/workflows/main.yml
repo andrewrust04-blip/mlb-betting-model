@@ -1,5 +1,7 @@
 name: Run MLB Model Daily
 
+# trigger refresh
+
 permissions:
   contents: write
 
