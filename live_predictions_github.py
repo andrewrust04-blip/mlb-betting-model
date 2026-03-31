@@ -353,7 +353,7 @@ if not lines_wide.empty:
     # =========================================================================
     # STEP 6B: BUILD FILTERED BETS + ADD SIZING
     # =========================================================================
-
+    
     bet_rows = []
     for _, row in betting_df.iterrows():
         for line in HALF_LINE_THRESHOLDS:
@@ -380,9 +380,9 @@ if not lines_wide.empty:
                         "simulated_median": row["simulated_median"],
                         "simulated_std":    row["simulated_std"],
                     })
-
+    
     filtered_bets = pd.DataFrame(bet_rows)
-
+    
     if not filtered_bets.empty:
         if not ALLOW_MULTIPLE_BETS_PER_PITCHER:
             filtered_bets = (
@@ -390,55 +390,67 @@ if not lines_wide.empty:
                 .groupby(["date", "pitcher_id"], as_index=False).head(1)
                 .reset_index(drop=True)
             )
+    
         filtered_bets["recommended_units"] = filtered_bets["edge"].apply(get_bet_size)
         filtered_bets["kelly_units"]       = filtered_bets.apply(
             lambda r: get_kelly_units(r["model_prob"], r["odds"]), axis=1)
+    
         filtered_bets["actual_strikeouts"] = np.nan
         filtered_bets["bet_result"]        = ""
         filtered_bets["profit_units"]      = np.nan
         filtered_bets["settled"]           = False
+    
         filtered_bets = filtered_bets.sort_values("edge", ascending=False).reset_index(drop=True)
-
+    
         print("\n=== FILTERED BETS ===")
         print(filtered_bets[[
             "pitcher_name", "team", "opponent", "line", "bet_side",
             "odds", "model_prob", "implied_prob", "edge",
             "recommended_units", "kelly_units"
         ]].to_string(index=False, float_format=lambda x: f"{x:.3f}"))
-
-        # Save CSVs (pipeline source of truth — do not remove)
+    
+        # Save CSVs
         filtered_bets.to_csv(FILTERED_BETS_PATH, index=False)
         print(f"\nSaved filtered bets to: {FILTERED_BETS_PATH}")
-
+    
+        # =========================
+        # BET LOG (UPDATED FIX)
+        # =========================
+    
         if os.path.exists(BET_LOG_PATH):
             bet_log = pd.read_csv(BET_LOG_PATH)
         else:
             bet_log = pd.DataFrame()
-
-        key_cols = ["date", "pitcher_id", "line", "bet_side", "odds"]
+    
+        # Normalize dates
         filtered_bets["date"] = pd.to_datetime(filtered_bets["date"], errors="coerce").dt.normalize()
-
+    
         if bet_log.empty:
             updated_bet_log = filtered_bets.copy()
         else:
             bet_log["date"] = pd.to_datetime(bet_log["date"], errors="coerce").dt.normalize()
+    
+            # Align columns
             for col in filtered_bets.columns:
-                if col not in bet_log.columns: bet_log[col] = np.nan
+                if col not in bet_log.columns:
+                    bet_log[col] = np.nan
             for col in bet_log.columns:
-                if col not in filtered_bets.columns: filtered_bets[col] = np.nan
+                if col not in filtered_bets.columns:
+                    filtered_bets[col] = np.nan
+    
             filtered_bets = filtered_bets[bet_log.columns]
-            existing_keys = set(
-                tuple(x) for x in bet_log[key_cols].itertuples(index=False, name=None)
-                if all(pd.notna(v) for v in x)
+    
+            # ✅ COMBINE + HARD DEDUPE (THIS FIXES YOUR ISSUE)
+            updated_bet_log = pd.concat([bet_log, filtered_bets], ignore_index=True)
+    
+            updated_bet_log = updated_bet_log.drop_duplicates(
+                subset=["date", "pitcher_id", "line", "bet_side"],
+                keep="first"
             )
-            new_rows = filtered_bets[
-                ~filtered_bets[key_cols].apply(tuple, axis=1).isin(existing_keys)
-            ].copy()
-            updated_bet_log = bet_log.copy() if new_rows.empty else pd.concat([bet_log, new_rows], ignore_index=True)
-
+    
         updated_bet_log.to_csv(BET_LOG_PATH, index=False)
         print(f"Updated bet log saved to: {BET_LOG_PATH}")
-
+    
         # =====================================================================
         # EXCEL EXPORTS
         # =====================================================================
@@ -446,24 +458,20 @@ if not lines_wide.empty:
             export_filtered_bets(filtered_bets)
         except Exception as e:
             print(f"Warning: filtered_bets.xlsx export failed: {e}")
-
+    
         try:
             export_bet_log(updated_bet_log)
         except Exception as e:
             print(f"Warning: bet_log.xlsx export failed: {e}")
-
+    
     else:
         print(f"\nNo bets met the edge threshold of {BET_EDGE_THRESHOLD:.1%}.")
-
+    
     print("\n=== CLEAN LIVE BETTING VIEW ===")
     print(betting_df.head(25).to_string(index=False, float_format=lambda x: f"{x:.3f}"))
     betting_df.to_csv(LIVE_PREDICTIONS_PATH, index=False)
     print(f"\nSaved clean betting view to: {LIVE_PREDICTIONS_PATH}")
-
-else:
-    print("\nNo sportsbook lines found.")
-    results.to_csv(LIVE_PREDICTIONS_PATH, index=False)
-    print(f"Saved live prediction file without sportsbook lines to: {LIVE_PREDICTIONS_PATH}")
+    
 
 # =============================================================================
 # STEP 7: QUICK TOP MODEL PLAYS
