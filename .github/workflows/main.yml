@@ -1,3 +1,5 @@
+# scheduler refresh
+
 name: Run MLB Model Daily
 
 permissions:
@@ -5,7 +7,7 @@ permissions:
 
 on:
   schedule:
-    - cron: '26 14 * * *'  # 10:26 AM Eastern
+    - cron: '7 12 * * *'
   workflow_dispatch:
 
 jobs:
