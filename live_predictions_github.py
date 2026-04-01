@@ -414,40 +414,64 @@ if not lines_wide.empty:
         print(f"\nSaved filtered bets to: {FILTERED_BETS_PATH}")
     
         # =========================
-        # BET LOG (UPDATED FIX)
+        # BET LOG (REPLACE TODAY'S UNSETTLED BETS)
         # =========================
-    
+        
         if os.path.exists(BET_LOG_PATH):
             bet_log = pd.read_csv(BET_LOG_PATH)
         else:
             bet_log = pd.DataFrame()
-    
-        # Normalize dates
+        
+        # Normalize today's filtered bet dates
         filtered_bets["date"] = pd.to_datetime(filtered_bets["date"], errors="coerce").dt.normalize()
-    
+        
         if bet_log.empty:
             updated_bet_log = filtered_bets.copy()
         else:
             bet_log["date"] = pd.to_datetime(bet_log["date"], errors="coerce").dt.normalize()
-    
-            # Align columns
+        
+            if "settled" in bet_log.columns:
+                bet_log["settled"] = (
+                    bet_log["settled"]
+                    .astype(str)
+                    .str.strip()
+                    .str.lower()
+                    .map({"true": True, "false": False})
+                    .fillna(False)
+                )
+            else:
+                bet_log["settled"] = False
+        
+            # Align columns both ways
             for col in filtered_bets.columns:
                 if col not in bet_log.columns:
                     bet_log[col] = np.nan
             for col in bet_log.columns:
                 if col not in filtered_bets.columns:
                     filtered_bets[col] = np.nan
-    
+        
             filtered_bets = filtered_bets[bet_log.columns]
-    
-            # ✅ COMBINE + HARD DEDUPE (THIS FIXES YOUR ISSUE)
-            updated_bet_log = pd.concat([bet_log, filtered_bets], ignore_index=True)
-    
+        
+            # Get today's date from the new filtered bets
+            today_dates = filtered_bets["date"].dropna().unique()
+        
+            # Remove ONLY today's unsettled bets from existing log
+            bet_log_kept = bet_log[
+                ~(
+                    bet_log["date"].isin(today_dates) &
+                    (bet_log["settled"] != True)
+                )
+            ].copy()
+        
+            # Add today's newest filtered bets
+            updated_bet_log = pd.concat([bet_log_kept, filtered_bets], ignore_index=True)
+        
+            # Final safety dedupe
             updated_bet_log = updated_bet_log.drop_duplicates(
                 subset=["date", "pitcher_id", "line", "bet_side"],
-                keep="first"
+                keep="last"
             )
-    
+        
         updated_bet_log.to_csv(BET_LOG_PATH, index=False)
         print(f"Updated bet log saved to: {BET_LOG_PATH}")
     
