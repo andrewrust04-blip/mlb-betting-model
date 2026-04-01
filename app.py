@@ -197,18 +197,49 @@ def profit_chart(df, height=260):
         df = df.sort_values("date")
     df["profit_units"] = pd.to_numeric(df["profit_units"], errors="coerce").fillna(0)
     df["cum"] = df["profit_units"].cumsum()
-    x    = df["date"] if "date" in df.columns else df.index
-    last = df["cum"].iloc[-1] if len(df) else 0
-    clr  = "#1a56db" if last >= 0 else "#dc2626"
-    fill = "rgba(26,86,219,0.08)" if last >= 0 else "rgba(220,38,38,0.08)"
-    fig  = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=x, y=df["cum"], mode="lines+markers",
-        line=dict(color=clr, width=2.5, shape="spline", smoothing=0.7),
-        marker=dict(size=5, color=clr, line=dict(width=2, color="#ffffff")),
-        fill="tozeroy", fillcolor=fill,
-        hovertemplate="<b>%{x|%b %d}</b><br>%{y:+.2f}u<extra></extra>",
-    ))
+    x = list(df["date"] if "date" in df.columns else df.index)
+    y = list(df["cum"])
+
+    fig = go.Figure()
+
+    # Draw green segments above 0, red segments below 0
+    # We split the line at every zero crossing
+    i = 0
+    while i < len(y):
+        # Determine color for this segment
+        seg_color = "#16a34a" if y[i] >= 0 else "#dc2626"
+        seg_fill  = "rgba(22,163,74,0.09)" if y[i] >= 0 else "rgba(220,38,38,0.09)"
+        seg_x, seg_y = [x[i]], [y[i]]
+        j = i + 1
+        while j < len(y):
+            # Check for zero crossing between j-1 and j
+            if (y[j-1] >= 0) != (y[j] >= 0):
+                # Interpolate crossing point
+                frac = y[j-1] / (y[j-1] - y[j])
+                if hasattr(x[j], "timestamp"):
+                    import datetime
+                    xc = x[j-1] + (x[j] - x[j-1]) * frac
+                else:
+                    xc = x[j-1] + (x[j] - x[j-1]) * frac
+                seg_x.append(xc)
+                seg_y.append(0.0)
+                break
+            seg_x.append(x[j])
+            seg_y.append(y[j])
+            j += 1
+
+        show_markers = len(seg_x) > 1
+        fig.add_trace(go.Scatter(
+            x=seg_x, y=seg_y,
+            mode="lines+markers" if show_markers else "markers",
+            line=dict(color=seg_color, width=2.5, shape="spline", smoothing=0.6),
+            marker=dict(size=4, color=seg_color, line=dict(width=1.5, color="#ffffff")),
+            fill="tozeroy", fillcolor=seg_fill,
+            showlegend=False,
+            hovertemplate="<b>%{x|%b %d}</b><br>%{y:+.2f}u<extra></extra>",
+        ))
+        i = j  # next segment starts at the crossing point index
+
     fig.update_layout(**{**PLOT_BASE, "height": height})
     return fig
 
