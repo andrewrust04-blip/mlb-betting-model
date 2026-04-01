@@ -84,6 +84,10 @@ html, body, [class*="css"] { font-family: 'Sora', sans-serif !important; color: 
 [data-testid="stDataFrameResizable"] tbody tr { border-bottom:1px solid var(--border) !important; }
 [data-testid="stDataFrameResizable"] tbody tr:hover td { background:var(--accent-bg) !important; }
 [data-testid="stDataFrameResizable"] tbody td { color:var(--text-1) !important; font-size:13px !important; font-family:'JetBrains Mono',monospace !important; background:var(--surface) !important; }
+/* Force Edge progress bars blue */
+[data-testid="stDataFrameResizable"] [role="progressbar"] > div { background: var(--accent) !important; }
+[data-testid="stDataFrameResizable"] [role="progressbar"] { background: rgba(26,86,219,0.12) !important; border-radius: 4px !important; }
+
 
 /* SELECTBOX */
 .stSelectbox label, .stMultiSelect label, .stDateInput label { font-size:10px !important; font-weight:700 !important; color:var(--text-3) !important; text-transform:uppercase !important; letter-spacing:0.12em !important; font-family:'Sora',sans-serif !important; }
@@ -146,22 +150,32 @@ COL_LABELS = {
 def safe_cols(df, cols):
     return [c for c in cols if c in df.columns]
 
-def smart_round(val):
+def smart_round(val, metric_name=""):
     """Round raw metric values to clean display strings."""
+    s = str(val).strip()
     try:
-        f = float(str(val).replace("%","").strip())
-        # Looks like a raw rate (0–1 range, not a count)
-        if "%" in str(val):
+        f = float(s.replace("%","").replace("+",""))
+        lc = metric_name.lower()
+        # Already formatted with %
+        if "%" in s:
             return f"{f:.1f}%"
-        if 0 < abs(f) <= 1 and "." in str(val):
-            return f"{f:.2%}"
+        # Win rate / probability fields stored as 0-1 raw
+        is_rate = any(x in lc for x in ["rate","prob","pct"])
+        if is_rate and 0 <= abs(f) <= 1:
+            return f"{f:.1%}"
+        # Large counts
         if abs(f) >= 1000:
             return f"{f:,.0f}"
-        if f == int(f):
+        # Clean integers (total_bets=29.0)
+        if f == int(f) and abs(f) < 10000:
             return f"{int(f)}"
+        # Profit fields — 2dp with sign and 'u'
+        if any(x in lc for x in ["profit","unit"]):
+            return f"{f:+.2f}u"
+        # Everything else — 2dp
         return f"{f:.2f}"
     except Exception:
-        return str(val)
+        return s
 
 # ═══════════════════════════════════════
 # PLOTLY THEME
@@ -237,9 +251,10 @@ with tab1:
         mc  = st.columns(n_m)
         for i, row in summary.iterrows():
             if i < len(mc):
+                mname = str(row.get("metric",""))
                 mc[i].metric(
-                    label=str(row.get("metric","")).replace("_"," ").title(),
-                    value=smart_round(row.get("value","")),
+                    label=mname.replace("_"," ").title(),
+                    value=smart_round(row.get("value",""), mname),
                 )
         st.markdown('<div class="gap"></div>', unsafe_allow_html=True)
 
@@ -351,14 +366,23 @@ with tab2:
         s1,s2,s3,s4,s5 = st.columns(5)
         s1.metric("Bets",      f"{n_bets}")
         s2.metric("Record",    f"{n_wins}–{n_losses}")
-        s3.metric("Win Rate",  f"{win_rate:.1f}%", delta=f"{win_rate-50:.1f}% vs 50%", delta_color="normal")
-        s4.metric("Total P/L", f"{total_pl:+.2f}u", delta_color="normal")
+        s3.metric("Win Rate",  f"{win_rate:.1f}%")
+        s4.metric("Total P/L", f"{total_pl:+.2f}u")
         s5.metric("Avg Edge",  f"{avg_edge:.1f}%")
 
         st.markdown('<div class="gap-lg"></div>', unsafe_allow_html=True)
         sec("Bet History")
 
         dl = fl[safe_cols(fl, DISPLAY_COLS_LOG)].copy()
+        # Replace "None" strings with dashes for cleaner display
+        for col in ["actual_strikeouts","bet_result","profit_units"]:
+            if col in dl.columns:
+                dl[col] = dl[col].replace("None", "—").replace(float("nan"), "—")
+                dl[col] = dl[col].where(dl[col].notna(), "—")
+        # Numeric conversions
+        for nc in ["edge","profit_units","odds","line","predicted_mean"]:
+            if nc in dl.columns:
+                dl[nc] = pd.to_numeric(dl[nc], errors="coerce")
         lcfg = {}
         if "edge"             in dl.columns: lcfg["edge"]             = st.column_config.ProgressColumn("Edge", format="%.1f%%", min_value=0, max_value=0.25)
         if "profit_units"     in dl.columns: lcfg["profit_units"]     = st.column_config.NumberColumn("P/L (u)", format="%+.2f")
