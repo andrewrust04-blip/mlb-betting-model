@@ -1,6 +1,6 @@
 date,bookmaker,player_name,line,side,odds
-2026-04-01,FanDuel,Chris Sale,8.5,Over,110
-2026-04-01,FanDuel,Chris Sale,8.5,Under,-146
+2026-04-01,FanDuel,Chris Sale,8.5,Over,108
+2026-04-01,FanDuel,Chris Sale,8.5,Under,-144
 2026-04-01,FanDuel,Luis Severino,3.5,Over,-166
 2026-04-01,FanDuel,Luis Severino,3.5,Under,124
 2026-04-01,FanDuel,Nathan Eovaldi,5.5,Over,-168
@@ -9,12 +9,12 @@ date,bookmaker,player_name,line,side,odds
 2026-04-01,FanDuel,Trevor Rogers,5.5,Under,-158
 2026-04-01,FanDuel,Paul Skenes,7.5,Over,100
 2026-04-01,FanDuel,Paul Skenes,7.5,Under,-132
-2026-04-01,FanDuel,Andrew Abbott,5.5,Over,-120
-2026-04-01,FanDuel,Andrew Abbott,5.5,Under,-110
-2026-04-01,FanDuel,Cristopher Sanchez,6.5,Over,-146
-2026-04-01,FanDuel,Cristopher Sanchez,6.5,Under,110
+2026-04-01,FanDuel,Andrew Abbott,5.5,Over,-118
+2026-04-01,FanDuel,Andrew Abbott,5.5,Under,-112
+2026-04-01,FanDuel,Cristopher Sanchez,6.5,Over,-148
+2026-04-01,FanDuel,Cristopher Sanchez,6.5,Under,112
 2026-04-01,FanDuel,Cade Cavalli,4.5,Over,-102
-2026-04-01,FanDuel,Cade Cavalli,4.5,Under,-128
+2026-04-01,FanDuel,Cade Cavalli,4.5,Under,-130
 2026-04-01,FanDuel,Kyle Freeland,3.5,Over,100
 2026-04-01,FanDuel,Kyle Freeland,3.5,Under,-132
 2026-04-01,FanDuel,Kevin Gausman,7.5,Over,116
@@ -43,14 +43,14 @@ date,bookmaker,player_name,line,side,odds
 2026-04-01,FanDuel,Zac Gallen,5.5,Under,112
 2026-04-01,FanDuel,Tarik Skubal,6.5,Over,-144
 2026-04-01,FanDuel,Tarik Skubal,6.5,Under,108
+2026-04-01,FanDuel,Cam Schlittler,5.5,Over,-144
+2026-04-01,FanDuel,Cam Schlittler,5.5,Under,108
+2026-04-01,FanDuel,George Kirby,7.5,Over,132
+2026-04-01,FanDuel,George Kirby,7.5,Under,-178
 2026-04-01,FanDuel,Nick Pivetta,5.5,Over,-172
 2026-04-01,FanDuel,Nick Pivetta,5.5,Under,128
 2026-04-01,FanDuel,Adrian Houser,3.5,Over,-125
 2026-04-01,FanDuel,Adrian Houser,3.5,Under,-106
-2026-04-01,FanDuel,Joe Ryan,5.5,Over,104
-2026-04-01,FanDuel,Joe Ryan,5.5,Under,-138
-2026-04-01,FanDuel,Noah Cameron,4.5,Over,104
-2026-04-01,FanDuel,Noah Cameron,4.5,Under,-138
 2026-04-02,FanDuel,Gavin Williams,5.5,Over,116
 2026-04-02,FanDuel,Gavin Williams,5.5,Under,-154
 2026-04-02,FanDuel,Yoshinobu Yamamoto,6.5,Over,-104
