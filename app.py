@@ -6,7 +6,7 @@ st.set_page_config(layout="wide")
 # =========================
 # LOAD DATA FROM GITHUB
 # =========================
-BASE_URL = "BASE_URL = "https://raw.githubusercontent.com/andrewrust04-blip/mlb-betting-model/main/"
+BASE_URL = "https://raw.githubusercontent.com/andrewrust04-blip/mlb-betting-model/main/"
 
 def load_csv(file):
     try:
