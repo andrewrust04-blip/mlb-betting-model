@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MLB Strikeout Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ══════════════ RESET & ROOT ══════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1e;
+  --bg2:#0c1526;
+  --surface:#111827;
+  --surface2:#162033;
+  --surface3:#1c2a40;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --text-1:#f0f4ff;
+  --text-2:#a8b8d8;
+  --text-3:#5a7099;
+  --accent:#3b82f6;
+  --accent2:#1d4ed8;
+  --green:#16a34a;
+  --green-bg:rgba(22,163,74,0.12);
+  --green-border:rgba(22,163,74,0.3);
+  --amber:#d97706;
+  --amber-bg:rgba(217,119,6,0.12);
+  --amber-border:rgba(217,119,6,0.3);
+  --red:#dc2626;
+  --red-bg:rgba(220,38,38,0.12);
+  --red-border:rgba(220,38,38,0.3);
+  --radius:12px;
+  --radius-sm:8px;
+  --radius-xs:6px;
+}
+html{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text-1);font-size:14px}
+body{min-height:100vh;background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 70% -10%,rgba(59,130,246,0.12) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 0% 90%,rgba(16,185,129,0.06) 0%,transparent 50%);
+}
+
+/* ══════════════ LAYOUT ══════════════ */
+.app{max-width:1340px;margin:0 auto;padding:24px 20px 60px}
+@media(max-width:768px){.app{padding:16px 12px 40px}}
+
+/* ══════════════ HEADER ══════════════ */
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-icon{width:46px;height:46px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 20px rgba(59,130,246,0.35);flex-shrink:0}
+.brand-text h1{font-size:clamp(18px,3vw,26px);font-weight:800;letter-spacing:-0.04em;line-height:1}
+.brand-text h1 em{font-style:normal;background:linear-gradient(135deg,#60a5fa,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.brand-text p{font-size:11px;color:var(--text-3);margin-top:3px;font-weight:400}
+.header-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-2);white-space:nowrap}
+.pill-accent{background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4);color:#60a5fa}
+
+/* ══════════════ TABS ══════════════ */
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:24px;width:fit-content}
+.tab-btn{height:34px;padding:0 20px;font-size:13px;font-weight:600;color:var(--text-3);background:transparent;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.18s;white-space:nowrap}
+.tab-btn.active{color:var(--text-1);background:var(--surface2);box-shadow:0 1px 3px rgba(0,0,0,0.3)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ══════════════ SECTION HEADER ══════════════ */
+.sec-head{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);white-space:nowrap}
+.sec-line{flex:1;height:1px;background:var(--border)}
+
+/* ══════════════ SUMMARY CARDS ══════════════ */
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 14px;position:relative;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#1d4ed8,#3b82f6,transparent)}
+.card:hover{border-color:var(--border2);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.card-label{font-size:9px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
+.card-value{font-family:'JetBrains Mono',monospace;font-size:clamp(18px,2.5vw,26px);font-weight:700;color:var(--text-1);letter-spacing:-0.02em;line-height:1.1}
+.card-value.positive{color:#4ade80}
+.card-value.negative{color:#f87171}
+
+/* ══════════════ FILTER ROW ══════════════ */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filter-btn{height:32px;padding:0 14px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:20px;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.15s;white-space:nowrap}
+.filter-btn:hover{border-color:var(--border2);color:var(--text-1)}
+.filter-btn.active{background:rgba(59,130,246,0.18);border-color:rgba(59,130,246,0.5);color:#60a5fa}
+.filter-select{height:32px;padding:0 10px;font-size:12px;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xs);cursor:pointer;font-family:'Sora',sans-serif;outline:none}
+.filter-select:focus{border-color:var(--accent)}
+.filter-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);margin-right:4px}
+
+/* ══════════════ TABLE ══════════════ */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:13px}
+thead th{background:var(--surface2);color:var(--text-3);font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;font-family:'Sora',sans-serif;cursor:pointer;user-select:none}
+thead th:hover{color:var(--text-2)}
+thead th.sorted-asc::after{content:' ↑'}
+thead th.sorted-desc::after{content:' ↓'}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(59,130,246,0.05)}
+tbody td{padding:11px 14px;color:var(--text-1);white-space:nowrap}
+tbody td.dim{color:var(--text-3)}
+.empty-row td{text-align:center;padding:32px;color:var(--text-3);font-style:italic;font-family:'Sora',sans-serif}
+
+/* ══════════════ BADGES ══════════════ */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.badge-green{background:var(--green-bg);border:1px solid var(--green-border);color:#4ade80}
+.badge-amber{background:var(--amber-bg);border:1px solid var(--amber-border);color:#fbbf24}
+.badge-red  {background:var(--red-bg);  border:1px solid var(--red-border);  color:#f87171}
+.badge-blue {background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:#60a5fa}
+.badge-gray {background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-3)}
+.badge-over {background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:#93c5fd}
+.badge-under{background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.3);color:#c4b5fd}
+.badge-win  {background:var(--green-bg);border:1px solid var(--green-border);color:#4ade80}
+.badge-loss {background:var(--red-bg);border:1px solid var(--red-border);color:#f87171}
+
+/* ══════════════ EDGE BAR ══════════════ */
+.edge-cell{display:flex;align-items:center;gap:8px}
+.edge-bar-wrap{flex:1;min-width:60px;max-width:100px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
+.edge-bar{height:100%;border-radius:2px;transition:width 0.3s}
+.edge-val{font-size:11px;white-space:nowrap}
+
+/* ══════════════ CHART ══════════════ */
+.chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 20px 12px;position:relative}
+.chart-wrap canvas{display:block}
+
+/* ══════════════ BREAKDOWN GRID ══════════════ */
+.breakdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.breakdown-grid{grid-template-columns:1fr}}
+.breakdown-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.breakdown-card-head{background:var(--surface2);padding:10px 14px;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);border-bottom:1px solid var(--border);font-family:'Sora',sans-serif}
+
+/* ══════════════ BET LOG FILTERS ══════════════ */
+.log-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+@media(max-width:700px){.log-filters{grid-template-columns:1fr 1fr}}
+.log-filter-group label{display:block;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px;font-family:'Sora',sans-serif}
+.log-filter-group select,.log-filter-group input{width:100%;height:34px;padding:0 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--text-1);font-size:12px;font-family:'Sora',sans-serif;outline:none;transition:border-color 0.15s}
+.log-filter-group select:focus,.log-filter-group input:focus{border-color:rgba(59,130,246,0.5)}
+.log-filter-group input[type=date]::-webkit-calendar-picker-indicator{filter:invert(0.5)}
+
+/* ══════════════ SUMMARY STRIP ══════════════ */
+.summary-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:700px){.summary-strip{grid-template-columns:repeat(3,1fr)}}
+
+/* ══════════════ LOADING ══════════════ */
+.loading{text-align:center;padding:48px;color:var(--text-3);font-size:13px}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin-right:10px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══════════════ MISC ══════════════ */
+.gap{margin-top:20px}.gap-lg{margin-top:28px}
+.profit-pos{color:#4ade80;font-weight:600}
+.profit-neg{color:#f87171;font-weight:600}
+.no-data{color:var(--text-3);font-size:13px;font-style:italic;padding:16px 0}
+
+/* ══════════════ MOBILE ══════════════ */
+@media(max-width:600px){
+  .tabs{width:100%}.tab-btn{flex:1;padding:0 10px;font-size:12px}
+  .summary-cards{grid-template-columns:repeat(3,1fr)}
+  .card-value{font-size:18px}
+  .summary-strip{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ HEADER ══ -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">⚾</div>
+      <div class="brand-text">
+        <h1>MLB <em>Strikeout</em> Dashboard</h1>
+        <p>Pitcher strikeout model · updated daily</p>
+      </div>
+    </div>
+    <div class="header-pills">
+      <div class="pill" id="pill-date">—</div>
+      <div class="pill pill-accent" id="pill-bets">— bets today</div>
+    </div>
+  </div>
+
+  <!-- ══ TABS ══ -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('betlog',this)">📋 Bet Log</button>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TAB 1 — DASHBOARD
+  ══════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-dashboard">
+
+    <!-- Season metrics -->
+    <div class="sec-head"><span class="sec-label">Season Performance</span><span class="sec-line"></span></div>
+    <div class="summary-cards" id="season-cards">
+      <div class="loading"><span class="spinner"></span>Loading…</div>
+    </div>
+
+    <div class="gap-lg"></div>
+
+    <!-- Today's bets -->
+    <div class="sec-head"><span class="sec-label">Today's Bets</span><span class="sec-line"></span></div>
+    <div class="filter-row">
+      <span class="filter-label">Side</span>
+      <button class="filter-btn active" onclick="filterToday('side','all',this)">All</button>
+      <button class="filter-btn" onclick="filterToday('side','over',this)">Over</button>
+      <button class="filter-btn" onclick="filterToday('side','under',this)">Under</button>
+      <span style="margin-left:8px;" class="filter-label">Edge</span>
+      <button class="filter-btn active" onclick="filterToday('edge','all',this)">All</button>
+      <button class="filter-btn" onclick="filterToday('edge','high',this)">High (&gt;8%)</button>
+      <button class="filter-btn" onclick="filterToday('edge','mid',this)">Mid (3–8%)</button>
+      <button class="filter-btn" onclick="filterToday('edge','low',this)">Low (&lt;3%)</button>
+    </div>
+    <div class="table-wrap" id="today-wrap">
+      <div class="loading"><span class="spinner"></span>Loading…</div>
+    </div>
+
+    <div class="gap-lg"></div>
+
+    <!-- Profit chart -->
+    <div class="sec-head"><span class="sec-label">Cumulative Profit (units)</span><span class="sec-line"></span></div>
+    <div class="chart-wrap">
+      <canvas id="profit-chart" height="90"></canvas>
+    </div>
+
+    <div class="gap-lg"></div>
+
+    <!-- Performance breakdown -->
+    <div class="sec-head"><span class="sec-label">Performance Breakdown</span><span class="sec-line"></span></div>
+    <div class="breakdown-grid">
+      <div class="breakdown-card">
+        <div class="breakdown-card-head">By Line</div>
+        <div class="table-wrap" style="border:none;border-radius:0" id="breakdown-line">
+          <div class="loading"><span class="spinner"></span></div>
+        </div>
+      </div>
+      <div class="breakdown-card">
+        <div class="breakdown-card-head">By Edge Bucket</div>
+        <div class="table-wrap" style="border:none;border-radius:0" id="breakdown-edge">
+          <div class="loading"><span class="spinner"></span></div>
+        </div>
+      </div>
+      <div class="breakdown-card">
+        <div class="breakdown-card-head">Over vs Under</div>
+        <div class="table-wrap" style="border:none;border-radius:0" id="breakdown-side">
+          <div class="loading"><span class="spinner"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TAB 2 — BET LOG
+  ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-betlog">
+
+    <div class="sec-head"><span class="sec-label">Filters</span><span class="sec-line"></span></div>
+    <div class="log-filters">
+      <div class="log-filter-group">
+        <label>Side</label>
+        <select id="log-side" onchange="renderLog()"><option value="">All</option><option>over</option><option>under</option></select>
+      </div>
+      <div class="log-filter-group">
+        <label>Result</label>
+        <select id="log-result" onchange="renderLog()"><option value="">All</option><option value="win">Win</option><option value="loss">Loss</option><option value="push">Push</option></select>
+      </div>
+      <div class="log-filter-group">
+        <label>Pitcher</label>
+        <select id="log-pitcher" onchange="renderLog()"><option value="">All</option></select>
+      </div>
+      <div class="log-filter-group">
+        <label>Date From</label>
+        <input type="date" id="log-date-from" onchange="renderLog()"/>
+      </div>
+    </div>
+
+    <div class="sec-head"><span class="sec-label">Summary</span><span class="sec-line"></span></div>
+    <div class="summary-strip" id="log-summary-strip">
+      <div class="card"><div class="card-label">Bets</div><div class="card-value" id="ls-bets">—</div></div>
+      <div class="card"><div class="card-label">Record</div><div class="card-value" id="ls-record">—</div></div>
+      <div class="card"><div class="card-label">Win Rate</div><div class="card-value" id="ls-winrate">—</div></div>
+      <div class="card"><div class="card-label">Total P/L</div><div class="card-value" id="ls-pl">—</div></div>
+      <div class="card"><div class="card-label">Avg Edge</div><div class="card-value" id="ls-edge">—</div></div>
+    </div>
+
+    <div class="gap"></div>
+    <div class="sec-head"><span class="sec-label">Bet History</span><span class="sec-line"></span></div>
+    <div class="table-wrap" id="log-table-wrap">
+      <div class="loading"><span class="spinner"></span>Loading…</div>
+    </div>
+
+    <div class="gap-lg"></div>
+    <div class="sec-head"><span class="sec-label">P/L Over Time (filtered)</span><span class="sec-line"></span></div>
+    <div class="chart-wrap">
+      <canvas id="log-chart" height="70"></canvas>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+const BASE = "https://raw.githubusercontent.com/andrewrust04-blip/mlb-betting-model/main/";
+const FILES = {
+  betLog:       "bet_log.csv",
+  filteredBets: "filtered_bets.csv",
+  summary:      "dashboard_summary.csv",
+  byLine:       "dashboard_by_line.csv",
+  byEdge:       "dashboard_by_edge.csv",
+  bySide:       "dashboard_by_side.csv",
+};
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let DATA = {};
+let todaySideFilter = "all";
+let todayEdgeFilter = "all";
+let profitChartInst = null;
+let logChartInst    = null;
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+const fetchCSV = url => new Promise((res,rej) => {
+  Papa.parse(url, { download:true, header:true, skipEmptyLines:true,
+    complete: r => res(r.data), error: rej });
+});
+
+const fmtPct   = v => { const n=parseFloat(v); return isNaN(n)?'—':(n*100).toFixed(1)+'%'; };
+const fmtEdge  = v => { const n=parseFloat(v); return isNaN(n)?'—':(n*100).toFixed(1)+'%'; };
+const fmtOdds  = v => { const n=parseInt(v);   return isNaN(n)?'—':(n>0?'+':'')+n; };
+const fmtNum   = (v,dp=2) => { const n=parseFloat(v); return isNaN(n)?'—':n.toFixed(dp); };
+const fmtPL    = v => { const n=parseFloat(v); return isNaN(n)?'—':(n>=0?'+':'')+n.toFixed(2)+'u'; };
+const fmtDate  = v => { if(!v||v==='None')return'—'; const d=new Date(v); return isNaN(d)?v:d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); };
+const isDash   = v => !v||v==='None'||v==='none'||v==='nan'||v===''||v===null||v===undefined;
+
+function edgeBadge(raw) {
+  const e = parseFloat(raw);
+  if (isNaN(e)) return '<span class="badge badge-gray">—</span>';
+  const pct = (e*100).toFixed(1)+'%';
+  if (e > 0.15) return `<span class="badge badge-green">+${pct}</span>`;
+  if (e > 0.08) return `<span class="badge badge-amber">+${pct}</span>`;
+  return `<span class="badge badge-red">+${pct}</span>`;
+}
+
+function edgeBar(raw) {
+  const e = parseFloat(raw);
+  if (isNaN(e)) return '—';
+  const pct = (e*100).toFixed(1);
+  const w   = Math.min(e/0.25*100, 100).toFixed(1);
+  const col = e>0.15?'#4ade80':e>0.08?'#fbbf24':'#f87171';
+  return `<div class="edge-cell">
+    <div class="edge-bar-wrap"><div class="edge-bar" style="width:${w}%;background:${col}"></div></div>
+    <span class="edge-val" style="color:${col}">+${pct}%</span>
+  </div>`;
+}
+
+function sideBadge(s) {
+  if (!s||s==='None') return '<span class="badge badge-gray">—</span>';
+  const l = s.toLowerCase();
+  if (l==='over')  return `<span class="badge badge-over">Over</span>`;
+  if (l==='under') return `<span class="badge badge-under">Under</span>`;
+  return `<span class="badge badge-gray">${s}</span>`;
+}
+
+function resultBadge(r) {
+  if (isDash(r)) return '<span class="badge badge-gray">Pending</span>';
+  const l = r.toLowerCase();
+  if (l==='win')  return `<span class="badge badge-win">Win</span>`;
+  if (l==='loss') return `<span class="badge badge-loss">Loss</span>`;
+  return `<span class="badge badge-gray">${r}</span>`;
+}
+
+function plCell(v) {
+  if (isDash(v)) return '<span class="dim">—</span>';
+  const n = parseFloat(v);
+  if (isNaN(n)) return '<span class="dim">—</span>';
+  const cls = n>=0?'profit-pos':'profit-neg';
+  return `<span class="${cls}">${fmtPL(v)}</span>`;
+}
+
+function smartRound(val, name='') {
+  const s = String(val||'').trim();
+  const n = parseFloat(s.replace('%','').replace('+',''));
+  if (isNaN(n)) return s||'—';
+  if (s.includes('%')) return n.toFixed(1)+'%';
+  const lc = name.toLowerCase();
+  if (['rate','prob','pct'].some(x=>lc.includes(x)) && Math.abs(n)<=1) return (n*100).toFixed(1)+'%';
+  if (Math.abs(n)>=1000) return n.toLocaleString('en-US',{maximumFractionDigits:0});
+  if (n===Math.floor(n) && Math.abs(n)<10000) return String(Math.floor(n));
+  if (['profit','unit'].some(x=>lc.includes(x))) return (n>=0?'+':'')+n.toFixed(2)+'u';
+  return n.toFixed(2);
+}
+
+// ══════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// SEASON METRICS
+// ══════════════════════════════════════════
+function renderSummaryCards(rows) {
+  const el = document.getElementById('season-cards');
+  if (!rows||!rows.length) { el.innerHTML='<p class="no-data">No summary data.</p>'; return; }
+  el.innerHTML = rows.slice(0,6).map(r => {
+    const name  = (r.metric||'').replace(/_/g,' ');
+    const val   = smartRound(r.value, r.metric||'');
+    const isPos = val.startsWith('+') || (parseFloat(val)>0 && !val.startsWith('-'));
+    const isNeg = val.startsWith('-');
+    const valCls = (r.metric||'').toLowerCase().includes('profit') ? (isPos?'positive':isNeg?'negative':'') : '';
+    return `<div class="card">
+      <div class="card-label">${name}</div>
+      <div class="card-value ${valCls}">${val}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// TODAY'S BETS TABLE
+// ══════════════════════════════════════════
+function filterToday(type, val, btn) {
+  // Toggle button groups
+  const row = btn.parentElement;
+  const group = [...row.querySelectorAll('.filter-btn')].filter(b => {
+    const onclick = b.getAttribute('onclick')||'';
+    return onclick.includes(`'${type}'`);
+  });
+  group.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if (type==='side') todaySideFilter=val;
+  if (type==='edge') todayEdgeFilter=val;
+  renderTodayTable();
+}
+
+function renderTodayTable() {
+  const wrap = document.getElementById('today-wrap');
+  let rows = (DATA.filteredBets||[]).slice();
+  if (!rows.length) { wrap.innerHTML='<p class="no-data" style="padding:20px">No bets scheduled for today.</p>'; return; }
+
+  // Convert edge to float
+  rows.forEach(r=>{ r._edge=parseFloat(r.edge)||0; });
+
+  // Sort by edge desc
+  rows.sort((a,b)=>b._edge-a._edge);
+
+  // Filters
+  if (todaySideFilter!=='all') rows=rows.filter(r=>(r.bet_side||'').toLowerCase()===todaySideFilter);
+  if (todayEdgeFilter==='high') rows=rows.filter(r=>r._edge>0.08);
+  else if (todayEdgeFilter==='mid')  rows=rows.filter(r=>r._edge>=0.03&&r._edge<=0.08);
+  else if (todayEdgeFilter==='low')  rows=rows.filter(r=>r._edge<0.03);
+
+  if (!rows.length) { wrap.innerHTML='<p class="no-data" style="padding:20px">No bets match the selected filters.</p>'; return; }
+
+  const cols = [
+    {k:'pitcher_name',  label:'Pitcher',  fn:r=>`<strong>${r.pitcher_name||'—'}</strong>`},
+    {k:'team',          label:'Team',     fn:r=>`<span class="dim">${r.team||'—'}</span>`},
+    {k:'opponent',      label:'Opp',      fn:r=>`<span class="dim">${r.opponent||'—'}</span>`},
+    {k:'bet_side',      label:'Side',     fn:r=>sideBadge(r.bet_side)},
+    {k:'line',          label:'Line',     fn:r=>fmtNum(r.line,1)},
+    {k:'odds',          label:'Odds',     fn:r=>fmtOdds(r.odds)},
+    {k:'model_prob',    label:'Model%',   fn:r=>fmtPct(r.model_prob)},
+    {k:'implied_prob',  label:'Impl%',    fn:r=>fmtPct(r.implied_prob)},
+    {k:'edge',          label:'Edge',     fn:r=>edgeBar(r.edge)},
+    {k:'predicted_mean',label:'Pred K',   fn:r=>fmtNum(r.predicted_mean,2)},
+    {k:'recommended_units',label:'Rec U', fn:r=>fmtNum(r.recommended_units,1)},
+    {k:'kelly_units',   label:'Kelly U',  fn:r=>fmtNum(r.kelly_units,1)},
+  ].filter(c=>rows.some(r=>r[c.k]!==undefined&&r[c.k]!==''));
+
+  wrap.innerHTML = `<table>
+    <thead><tr>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c.fn(r)}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ══════════════════════════════════════════
+// PROFIT CHART (green above 0 / red below)
+// ══════════════════════════════════════════
+function buildProfitChart(canvasId, rows) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return null;
+
+  // Sort by date
+  const sorted = [...rows].filter(r=>r.profit_units&&r.profit_units!=='None')
+    .sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  if (!sorted.length) return null;
+
+  // Build cumulative
+  let cum = 0;
+  const labels=[], values=[];
+  sorted.forEach(r=>{
+    cum += parseFloat(r.profit_units)||0;
+    labels.push(fmtDate(r.date));
+    values.push(parseFloat(cum.toFixed(3)));
+  });
+
+  // Build point colors and segment colors
+  const pointColors = values.map(v=>v>=0?'#4ade80':'#f87171');
+
+  // Create gradient segments via dataset per segment color approach
+  // We'll use a single dataset with per-point segment coloring via segment plugin
+  const ctx = canvas.getContext('2d');
+
+  // Destroy old
+  if (canvasId==='profit-chart' && profitChartInst) { profitChartInst.destroy(); profitChartInst=null; }
+  if (canvasId==='log-chart'    && logChartInst)    { logChartInst.destroy();    logChartInst=null; }
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: pointColors,
+        pointBorderColor: '#111827',
+        pointBorderWidth: 1.5,
+        fill: false,
+        tension: 0.3,
+        segment: {
+          borderColor: ctx => values[ctx.p1DataIndex] >= 0 && values[ctx.p0DataIndex] >= 0
+            ? '#4ade80'
+            : values[ctx.p1DataIndex] < 0 && values[ctx.p0DataIndex] < 0
+            ? '#f87171'
+            : values[ctx.p0DataIndex] >= 0 ? '#4ade80' : '#f87171',
+        },
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      interaction: { mode:'index', intersect:false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0c1526',
+          borderColor: 'rgba(59,130,246,0.4)',
+          borderWidth: 1,
+          titleColor: '#f0f4ff',
+          bodyColor: '#a8b8d8',
+          titleFont: { family:'JetBrains Mono', size:12 },
+          bodyFont:  { family:'JetBrains Mono', size:12 },
+          padding: 10,
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.y;
+              return (v>=0?'+':'')+v.toFixed(2)+'u';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display:false },
+          ticks: { color:'#5a7099', font:{ family:'JetBrains Mono', size:10 }, maxRotation:0, autoSkip:true, maxTicksLimit:8 },
+          border: { color:'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          grid: { color:'rgba(255,255,255,0.04)' },
+          ticks: { color:'#5a7099', font:{ family:'JetBrains Mono', size:10 },
+            callback: v=>(v>=0?'+':'')+v.toFixed(1)+'u' },
+          border: { color:'rgba(255,255,255,0.05)' }
+        }
+      }
+    }
+  });
+
+  // Draw zero line + filled areas as background plugin
+  // Add fill areas via a second hidden dataset per sign
+  if (canvasId==='profit-chart') profitChartInst=chart;
+  if (canvasId==='log-chart')    logChartInst=chart;
+  return chart;
+}
+
+// ══════════════════════════════════════════
+// BREAKDOWN TABLES
+// ══════════════════════════════════════════
+function renderBreakdown(elId, rows) {
+  const el = document.getElementById(elId);
+  if (!rows||!rows.length) { el.innerHTML='<p class="no-data" style="padding:14px 16px">No data yet.</p>'; return; }
+
+  const numCols = Object.keys(rows[0]).filter(k=>{
+    const v=parseFloat(rows[0][k]); return !isNaN(v);
+  });
+  const allCols = Object.keys(rows[0]);
+
+  // Add win_rate and roi if wins/losses/profit columns exist
+  const hasWins   = allCols.some(c=>c.toLowerCase().includes('win'));
+  const hasLosses = allCols.some(c=>c.toLowerCase().includes('loss'));
+  const hasProfit = allCols.some(c=>c.toLowerCase().includes('profit'));
+  const hasBets   = allCols.some(c=>c.toLowerCase().includes('bet'));
+
+  const cols = allCols.filter(c=>!['win_rate','roi'].includes(c));
+
+  const fmt = (k,v) => {
+    if (isDash(v)) return '<span class="dim">—</span>';
+    const n=parseFloat(v);
+    const lc=k.toLowerCase();
+    if (isNaN(n)) return v;
+    if (lc.includes('profit')||lc.includes('unit')||lc.includes('roi')) {
+      const cls=n>=0?'profit-pos':'profit-neg';
+      return `<span class="${cls}">${(n>=0?'+':'')+n.toFixed(2)}</span>`;
+    }
+    if (lc.includes('edge')||lc.includes('rate')) return n.toFixed(3);
+    if (n===Math.floor(n)) return Math.floor(n);
+    return n.toFixed(2);
+  };
+
+  // Compute win rate + roi per row
+  const enriched = rows.map(r=>{
+    const wins   = parseFloat(r.wins||r.Wins||0)||0;
+    const losses = parseFloat(r.losses||r.Losses||0)||0;
+    const settled = wins+losses;
+    const profit  = parseFloat(r.flat_profit||r.profit||0)||0;
+    const bets    = parseFloat(r.bets||r.Bets||0)||0;
+    return {
+      ...r,
+      _win_rate: settled>0 ? (wins/settled*100).toFixed(1)+'%' : '—',
+      _roi:      bets>0    ? ((profit/bets)*100).toFixed(1)+'%' : '—',
+    };
+  });
+
+  const headCols = [...cols, 'Win Rate', 'ROI'];
+  el.innerHTML = `<table>
+    <thead><tr>${headCols.map(c=>`<th>${c.replace(/_/g,' ')}</th>`).join('')}</tr></thead>
+    <tbody>${enriched.map(r=>`<tr>
+      ${cols.map(c=>`<td>${fmt(c,r[c])}</td>`).join('')}
+      <td>${r._win_rate}</td>
+      <td>${r._roi}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ══════════════════════════════════════════
+// BET LOG
+// ══════════════════════════════════════════
+function populateLogFilters(rows) {
+  const pitcherSel = document.getElementById('log-pitcher');
+  const pitchers = [...new Set(rows.map(r=>r.pitcher_name).filter(p=>p&&p!=='None'))].sort();
+  pitcherSel.innerHTML = '<option value="">All</option>' +
+    pitchers.map(p=>`<option value="${p}">${p}</option>`).join('');
+
+  // Date range
+  const dates = rows.map(r=>r.date).filter(d=>d&&d!=='None').sort();
+  if (dates.length) {
+    document.getElementById('log-date-from').value = dates[0].slice(0,10);
+  }
+}
+
+function renderLog() {
+  const side    = document.getElementById('log-side').value;
+  const result  = document.getElementById('log-result').value;
+  const pitcher = document.getElementById('log-pitcher').value;
+  const dateFrom= document.getElementById('log-date-from').value;
+
+  let rows = (DATA.betLog||[]).slice();
+
+  if (side)    rows = rows.filter(r=>(r.bet_side||'').toLowerCase()===side);
+  if (result)  rows = rows.filter(r=>(r.bet_result||'').toLowerCase()===result);
+  if (pitcher) rows = rows.filter(r=>r.pitcher_name===pitcher);
+  if (dateFrom)rows = rows.filter(r=>r.date&&r.date>=dateFrom);
+
+  // Sort newest first
+  rows.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  // Summary — only settled bets for win rate
+  const wins   = rows.filter(r=>(r.bet_result||'').toLowerCase()==='win').length;
+  const losses = rows.filter(r=>(r.bet_result||'').toLowerCase()==='loss').length;
+  const settled = wins+losses;
+  const winRate = settled>0?(wins/settled*100).toFixed(1)+'%':'—';
+  const totalPL = rows.reduce((s,r)=>{ const n=parseFloat(r.profit_units); return s+(isNaN(n)?0:n); },0);
+  const edges   = rows.map(r=>parseFloat(r.edge)).filter(n=>!isNaN(n));
+  const avgEdge = edges.length?(edges.reduce((s,v)=>s+v,0)/edges.length*100).toFixed(1)+'%':'—';
+
+  document.getElementById('ls-bets').textContent   = rows.length;
+  document.getElementById('ls-record').textContent  = `${wins}–${losses}`;
+  document.getElementById('ls-winrate').textContent = winRate;
+  const plEl = document.getElementById('ls-pl');
+  plEl.textContent = fmtPL(totalPL);
+  plEl.className = 'card-value '+(totalPL>=0?'positive':'negative');
+  document.getElementById('ls-edge').textContent = avgEdge;
+
+  // Table
+  const wrap = document.getElementById('log-table-wrap');
+  if (!rows.length) { wrap.innerHTML='<p class="no-data" style="padding:20px">No bets match filters.</p>'; return; }
+
+  const cols = [
+    {label:'Date',   fn:r=>fmtDate(r.date)},
+    {label:'Pitcher',fn:r=>`<strong>${r.pitcher_name||'—'}</strong>`},
+    {label:'Team',   fn:r=>`<span class="dim">${r.team||'—'}</span>`},
+    {label:'Opp',    fn:r=>`<span class="dim">${r.opponent||'—'}</span>`},
+    {label:'Side',   fn:r=>sideBadge(r.bet_side)},
+    {label:'Line',   fn:r=>fmtNum(r.line,1)},
+    {label:'Odds',   fn:r=>fmtOdds(r.odds)},
+    {label:'Edge',   fn:r=>edgeBar(r.edge)},
+    {label:'Pred K', fn:r=>fmtNum(r.predicted_mean,2)},
+    {label:'Act K',  fn:r=>isDash(r.actual_strikeouts)?'<span class="dim">—</span>':r.actual_strikeouts},
+    {label:'Result', fn:r=>resultBadge(r.bet_result)},
+    {label:'P/L',    fn:r=>plCell(r.profit_units)},
+  ];
+
+  wrap.innerHTML = `<table>
+    <thead><tr>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c.fn(r)}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table>`;
+
+  // Chart — only settled rows with profit
+  const chartRows = [...rows].filter(r=>!isDash(r.profit_units)).reverse();
+  buildProfitChart('log-chart', chartRows);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+async function init() {
+  // Date pill
+  document.getElementById('pill-date').textContent =
+    '📅 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  // Fetch all CSVs in parallel
+  const [betLog, filteredBets, summary, byLine, byEdge, bySide] = await Promise.allSettled([
+    fetchCSV(BASE+FILES.betLog),
+    fetchCSV(BASE+FILES.filteredBets),
+    fetchCSV(BASE+FILES.summary),
+    fetchCSV(BASE+FILES.byLine),
+    fetchCSV(BASE+FILES.byEdge),
+    fetchCSV(BASE+FILES.bySide),
+  ]);
+
+  DATA.betLog       = betLog.status==='fulfilled'       ? betLog.value       : [];
+  DATA.filteredBets = filteredBets.status==='fulfilled' ? filteredBets.value : [];
+  DATA.summary      = summary.status==='fulfilled'      ? summary.value      : [];
+  DATA.byLine       = byLine.status==='fulfilled'       ? byLine.value       : [];
+  DATA.byEdge       = byEdge.status==='fulfilled'       ? byEdge.value       : [];
+  DATA.bySide       = bySide.status==='fulfilled'       ? bySide.value       : [];
+
+  // Header pill
+  document.getElementById('pill-bets').textContent = `🎯 ${DATA.filteredBets.length} bets today`;
+
+  // Render everything
+  renderSummaryCards(DATA.summary);
+  renderTodayTable();
+  buildProfitChart('profit-chart', DATA.betLog);
+  renderBreakdown('breakdown-line', DATA.byLine);
+  renderBreakdown('breakdown-edge', DATA.byEdge);
+  renderBreakdown('breakdown-side', DATA.bySide);
+  populateLogFilters(DATA.betLog);
+  renderLog();
+}
+
+init();
+</script>
+</body>
+</html>
