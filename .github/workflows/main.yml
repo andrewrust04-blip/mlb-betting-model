@@ -43,7 +43,7 @@ jobs:
       run: python export_excel_github.py
 
     - name: Run performance dashboard
-      run: python performance_dashboard.py
+      run: python performance_dashboard_github.py
 
     - name: Commit updated files
       run: |
