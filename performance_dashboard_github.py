@@ -17,7 +17,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-from config import BET_LOG_PATH
+from config_github import BET_LOG_PATH
 
 
 # =============================================================================
