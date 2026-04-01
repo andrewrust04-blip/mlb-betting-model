@@ -359,7 +359,8 @@ with tab2:
         n_bets   = len(fl)
         n_wins   = int((fl["bet_result"]=="win").sum())  if "bet_result" in fl.columns else 0
         n_losses = int((fl["bet_result"]=="loss").sum()) if "bet_result" in fl.columns else 0
-        win_rate = n_wins/n_bets*100 if n_bets > 0 else 0
+        n_settled = n_wins + n_losses
+        win_rate = n_wins/n_settled*100 if n_settled > 0 else 0
         total_pl = fl["profit_units"].sum() if "profit_units" in fl.columns else 0
         avg_edge = fl["edge"].mean()*100    if "edge"         in fl.columns else 0
 
