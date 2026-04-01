@@ -200,45 +200,46 @@ def profit_chart(df, height=260):
     x = list(df["date"] if "date" in df.columns else df.index)
     y = list(df["cum"])
 
+    if not y:
+        fig = go.Figure()
+        fig.update_layout(**{**PLOT_BASE, "height": height})
+        return fig
+
+    # Build a dense list of (x, y) including interpolated zero-crossing points
+    pts_x, pts_y = [x[0]], [y[0]]
+    for i in range(1, len(y)):
+        if (y[i-1] >= 0) != (y[i] >= 0):
+            # Interpolate zero crossing
+            frac = y[i-1] / (y[i-1] - y[i])
+            xc = x[i-1] + (x[i] - x[i-1]) * frac
+            pts_x.append(xc)
+            pts_y.append(0.0)
+        pts_x.append(x[i])
+        pts_y.append(y[i])
+
+    # Split into contiguous same-sign segments
     fig = go.Figure()
-
-    # Draw green segments above 0, red segments below 0
-    # We split the line at every zero crossing
-    i = 0
-    while i < len(y):
-        # Determine color for this segment
-        seg_color = "#16a34a" if y[i] >= 0 else "#dc2626"
-        seg_fill  = "rgba(22,163,74,0.09)" if y[i] >= 0 else "rgba(220,38,38,0.09)"
-        seg_x, seg_y = [x[i]], [y[i]]
-        j = i + 1
-        while j < len(y):
-            # Check for zero crossing between j-1 and j
-            if (y[j-1] >= 0) != (y[j] >= 0):
-                # Interpolate crossing point
-                frac = y[j-1] / (y[j-1] - y[j])
-                if hasattr(x[j], "timestamp"):
-                    import datetime
-                    xc = x[j-1] + (x[j] - x[j-1]) * frac
-                else:
-                    xc = x[j-1] + (x[j] - x[j-1]) * frac
-                seg_x.append(xc)
-                seg_y.append(0.0)
-                break
-            seg_x.append(x[j])
-            seg_y.append(y[j])
-            j += 1
-
-        show_markers = len(seg_x) > 1
-        fig.add_trace(go.Scatter(
-            x=seg_x, y=seg_y,
-            mode="lines+markers" if show_markers else "markers",
-            line=dict(color=seg_color, width=2.5, shape="spline", smoothing=0.6),
-            marker=dict(size=4, color=seg_color, line=dict(width=1.5, color="#ffffff")),
-            fill="tozeroy", fillcolor=seg_fill,
-            showlegend=False,
-            hovertemplate="<b>%{x|%b %d}</b><br>%{y:+.2f}u<extra></extra>",
-        ))
-        i = j  # next segment starts at the crossing point index
+    seg_x, seg_y = [pts_x[0]], [pts_y[0]]
+    for i in range(1, len(pts_y)):
+        seg_x.append(pts_x[i])
+        seg_y.append(pts_y[i])
+        # End segment at a zero-crossing point (pts_y[i] == 0 and next changes sign)
+        at_cross = (pts_y[i] == 0.0 and i < len(pts_y) - 1 and
+                    ((pts_y[i-1] >= 0) != (pts_y[i+1] >= 0)))
+        if at_cross or i == len(pts_y) - 1:
+            is_pos = pts_y[i-1] >= 0 if len(seg_y) > 1 else pts_y[i] >= 0
+            clr  = "#16a34a" if is_pos else "#dc2626"
+            fill = "rgba(22,163,74,0.09)" if is_pos else "rgba(220,38,38,0.09)"
+            fig.add_trace(go.Scatter(
+                x=seg_x, y=seg_y,
+                mode="lines+markers",
+                line=dict(color=clr, width=2.5, shape="linear"),
+                marker=dict(size=4, color=clr, line=dict(width=1.5, color="#ffffff")),
+                fill="tozeroy", fillcolor=fill,
+                showlegend=False,
+                hovertemplate="<b>%{x|%b %d}</b><br>%{y:+.2f}u<extra></extra>",
+            ))
+            seg_x, seg_y = [pts_x[i]], [pts_y[i]]
 
     fig.update_layout(**{**PLOT_BASE, "height": height})
     return fig
