@@ -80,7 +80,7 @@ html, body, [class*="css"] {
     padding: 0 18px;
     font-size: 13px;
     font-weight: 500;
-    color: #6b7faa;
+    color: #8fafd4;
     background: transparent;
     border: none;
     border-radius: 7px;
@@ -117,7 +117,7 @@ html, body, [class*="css"] {
     border-radius: 12px 12px 0 0;
 }
 [data-testid="metric-container"] label {
-    color: #5a7099 !important;
+    color: #8fafd4 !important;
     font-size: 10px !important;
     font-weight: 600 !important;
     letter-spacing: 0.1em !important;
@@ -126,7 +126,7 @@ html, body, [class*="css"] {
 [data-testid="metric-container"] [data-testid="stMetricValue"] {
     font-size: clamp(22px, 3vw, 30px) !important;
     font-weight: 700 !important;
-    color: #ccdaff !important;
+    color: #ffffff !important;
     font-family: 'IBM Plex Mono', monospace !important;
     line-height: 1.1 !important;
 }
@@ -141,7 +141,7 @@ html, body, [class*="css"] {
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #3a5280;
+    color: #7a9cc4;
     margin: 0 0 10px 2px;
     display: flex;
     align-items: center;
@@ -151,7 +151,7 @@ html, body, [class*="css"] {
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, rgba(77,143,255,0.2), transparent);
+    background: linear-gradient(90deg, rgba(77,143,255,0.3), transparent);
 }
 
 /* ── Dataframe ── */
@@ -167,7 +167,7 @@ html, body, [class*="css"] {
 /* Dataframe header row */
 [data-testid="stDataFrameResizable"] thead th {
     background: rgba(10,25,65,0.95) !important;
-    color: #5a7099 !important;
+    color: #8fafd4 !important;
     font-size: 10px !important;
     font-weight: 700 !important;
     letter-spacing: 0.1em !important;
@@ -178,10 +178,10 @@ html, body, [class*="css"] {
     border-bottom: 1px solid rgba(77,143,255,0.06) !important;
 }
 [data-testid="stDataFrameResizable"] tbody tr:hover td {
-    background: rgba(77,143,255,0.07) !important;
+    background: rgba(77,143,255,0.1) !important;
 }
 [data-testid="stDataFrameResizable"] tbody td {
-    color: #a8bde8 !important;
+    color: #dde8f8 !important;
     font-size: 13px !important;
     font-family: 'IBM Plex Mono', monospace !important;
 }
@@ -190,7 +190,7 @@ html, body, [class*="css"] {
 .stSelectbox label, .stMultiSelect label, .stDateInput label {
     font-size: 10px !important;
     font-weight: 700 !important;
-    color: #3a5280 !important;
+    color: #8fafd4 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.1em !important;
 }
@@ -201,7 +201,7 @@ html, body, [class*="css"] {
 }
 [data-baseweb="select"] > div {
     background: transparent !important;
-    color: #a8bde8 !important;
+    color: #dde8f8 !important;
     font-size: 13px !important;
     border-color: rgba(77,143,255,0.2) !important;
 }
@@ -213,7 +213,7 @@ html, body, [class*="css"] {
     background: #0a1940 !important;
 }
 [data-baseweb="option"] {
-    color: #a8bde8 !important;
+    color: #dde8f8 !important;
     background: #0a1940 !important;
     font-size: 13px !important;
 }
@@ -229,7 +229,7 @@ html, body, [class*="css"] {
     border-radius: 8px !important;
 }
 [data-baseweb="input"] input {
-    color: #a8bde8 !important;
+    color: #dde8f8 !important;
     font-size: 13px !important;
     font-family: 'IBM Plex Mono', monospace !important;
 }
@@ -428,7 +428,7 @@ with tab1:
         )
     else:
         st.markdown(
-            '<div style="color:#3a5280;font-size:14px;padding:16px 0;font-style:italic;">No bets scheduled for today.</div>',
+            '<div style="color:#7a9cc4;font-size:14px;padding:16px 0;font-style:italic;">No bets scheduled for today.</div>',
             unsafe_allow_html=True,
         )
 
@@ -472,7 +472,7 @@ with tab1:
 
     def render_breakdown_table(df, label):
         if df.empty:
-            st.markdown(f'<div style="color:#3a5280;font-size:13px;font-style:italic;">{label}: no data yet.</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="color:#7a9cc4;font-size:13px;font-style:italic;">{label}: no data yet.</div>', unsafe_allow_html=True)
             return
         numeric_cols = df.select_dtypes(include="number").columns.tolist()
         col_cfg = {}
@@ -491,13 +491,13 @@ with tab1:
         )
 
     with col_a:
-        st.markdown('<div style="font-size:11px;color:#3a5280;font-weight:600;margin-bottom:8px;letter-spacing:0.05em;">BY LINE</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size:11px;color:#8fafd4;font-weight:600;margin-bottom:8px;letter-spacing:0.05em;">BY LINE</div>', unsafe_allow_html=True)
         render_breakdown_table(by_line, "By Line")
     with col_b:
-        st.markdown('<div style="font-size:11px;color:#3a5280;font-weight:600;margin-bottom:8px;letter-spacing:0.05em;">BY EDGE BUCKET</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size:11px;color:#8fafd4;font-weight:600;margin-bottom:8px;letter-spacing:0.05em;">BY EDGE BUCKET</div>', unsafe_allow_html=True)
         render_breakdown_table(by_edge, "By Edge")
     with col_c:
-        st.markdown('<div style="font-size:11px;color:#3a5280;font-weight:600;margin-bottom:8px;letter-spacing:0.05em;">OVER vs UNDER</div>', unsafe_allow_html=True)
+        st.markdown('<div style="font-size:11px;color:#8fafd4;font-weight:600;margin-bottom:8px;letter-spacing:0.05em;">OVER vs UNDER</div>', unsafe_allow_html=True)
         render_breakdown_table(by_side, "By Side")
 
 
@@ -507,7 +507,7 @@ with tab1:
 with tab2:
 
     if bet_log.empty:
-        st.markdown('<div style="color:#3a5280;font-size:14px;font-style:italic;padding:16px 0;">No bet log data found.</div>', unsafe_allow_html=True)
+        st.markdown('<div style="color:#7a9cc4;font-size:14px;font-style:italic;padding:16px 0;">No bet log data found.</div>', unsafe_allow_html=True)
     else:
         log = bet_log.copy()
         if "date" in log.columns:
