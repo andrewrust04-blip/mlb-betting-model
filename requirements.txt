@@ -8,3 +8,4 @@ pyarrow
 openpyxl
 xlsxwriter
 streamlit
+plotly
