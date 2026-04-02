@@ -3,6 +3,8 @@ name: Run MLB Model Daily
 permissions:
   contents: write
 
+# refresh schedule
+
 on:
   schedule:
     - cron: '37 12 * * *'
