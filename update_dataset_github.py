@@ -41,7 +41,7 @@ from config_github import (
 
 def assign_pitching_team_and_side(df):
     df = df.copy()
-    df["team"] = np.where(df["inning_topbot"] == "Top", df["home_team"], df["away_team"])
+    df["team"]     = np.where(df["inning_topbot"] == "Top", df["home_team"], df["away_team"])
     df["opponent"] = np.where(df["inning_topbot"] == "Top", df["away_team"], df["home_team"])
     df["home_away"] = np.where(df["inning_topbot"] == "Top", 1, 0)
     return df
@@ -228,77 +228,21 @@ def rebuild_rolling_features(combined_df):
           .transform(lambda s: s.shift(1).rolling(ROLLING_WINDOW, min_periods=ROLLING_WINDOW).mean())
     )
 
-    # -------------------------------------------------------------------------
-    # PRIOR START COUNT THIS SEASON
-    # -------------------------------------------------------------------------
+    # Season-to-date K/9 (resets each pitcher-season, uses only prior starts)
     ps_groups = ["pitcher_id", "season"]
-    df["prior_starts_this_season"] = df.groupby(ps_groups, sort=False).cumcount()
-
-    # -------------------------------------------------------------------------
-    # CURRENT SEASON-TO-DATE K/9 (uses only prior starts)
-    # -------------------------------------------------------------------------
     df["_ks_shifted"] = df.groupby(ps_groups, sort=False)["strikeouts"].shift(1)
     df["_ip_shifted"] = df.groupby(ps_groups, sort=False)["innings_pitched"].shift(1)
-    df["_cum_ks"] = df.groupby(ps_groups, sort=False)["_ks_shifted"].cumsum()
-    df["_cum_ip"] = df.groupby(ps_groups, sort=False)["_ip_shifted"].cumsum()
+    df["_cum_ks"]     = df.groupby(ps_groups, sort=False)["_ks_shifted"].cumsum()
+    df["_cum_ip"]     = df.groupby(ps_groups, sort=False)["_ip_shifted"].cumsum()
 
-    df["_season_k9_current"] = np.where(
+    df["season_K_per_9"] = np.where(
         df["_cum_ip"] > 0,
         (df["_cum_ks"] / df["_cum_ip"]) * 9,
         np.nan
     )
+    df = df.drop(columns=["_ks_shifted", "_ip_shifted", "_cum_ks", "_cum_ip"])
 
-    # -------------------------------------------------------------------------
-    # LAST SEASON FULL-SEASON K/9
-    # -------------------------------------------------------------------------
-    season_totals = (
-        df.groupby(["pitcher_id", "season"], as_index=False)
-          .agg(
-              season_strikeouts=("strikeouts", "sum"),
-              season_ip=("innings_pitched", "sum")
-          )
-          .sort_values(["pitcher_id", "season"])
-          .reset_index(drop=True)
-    )
-
-    season_totals["full_season_k9"] = np.where(
-        season_totals["season_ip"] > 0,
-        (season_totals["season_strikeouts"] / season_totals["season_ip"]) * 9,
-        np.nan
-    )
-
-    season_totals["last_season_k9"] = (
-        season_totals.groupby("pitcher_id", sort=False)["full_season_k9"].shift(1)
-    )
-
-    df = df.merge(
-        season_totals[["pitcher_id", "season", "last_season_k9"]],
-        on=["pitcher_id", "season"],
-        how="left"
-    )
-
-    # -------------------------------------------------------------------------
-    # EARLY-SEASON FALLBACK RULE:
-    # if pitcher has < 5 prior starts this season, use last season K/9
-    # otherwise use current season-to-date K/9
-    # if last season K/9 is missing, fall back to current season-to-date K/9
-    # -------------------------------------------------------------------------
-    df["season_K_per_9"] = np.where(
-        df["prior_starts_this_season"] < 5,
-        df["last_season_k9"],
-        df["_season_k9_current"]
-    )
-
-    df["season_K_per_9"] = df["season_K_per_9"].fillna(df["_season_k9_current"])
-
-    df = df.drop(columns=[
-        "_ks_shifted", "_ip_shifted", "_cum_ks", "_cum_ip",
-        "_season_k9_current", "last_season_k9"
-    ])
-
-    # -------------------------------------------------------------------------
     # Opponent K% — no leakage (prior cumulative, pandas-3.0 safe)
-    # -------------------------------------------------------------------------
     opp_daily = (
         df.groupby(["opponent", "season", "date"], as_index=False)
           .agg(day_k=("strikeouts", "sum"), day_bf=("batters_faced", "sum"))
