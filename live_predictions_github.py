@@ -127,8 +127,9 @@ def build_live_features(live_df, hist_df, target_date):
     target_ts     = pd.to_datetime(target_date)
     target_season = target_ts.year
     prior_season  = target_season - 1
-    hist_prior    = hist_df[hist_df["date"] < target_ts].copy()
-    hist_prior    = hist_prior.sort_values(["pitcher_id", "date", "game_pk"]).reset_index(drop=True)
+
+    hist_prior = hist_df[hist_df["date"] < target_ts].copy()
+    hist_prior = hist_prior.sort_values(["pitcher_id", "date", "game_pk"]).reset_index(drop=True)
 
     feature_rows, skipped_rows = [], []
 
@@ -149,20 +150,41 @@ def build_live_features(live_df, hist_df, target_date):
             continue
 
         last_5 = pitcher_hist.tail(5)
+
         season_ip = season_hist["innings_pitched"].sum()
         season_k  = season_hist["strikeouts"].sum()
 
-        if season_ip > 0:
-            season_k_per_9 = (season_k / season_ip) * 9
-        else:
-            prior_ip = prior_season_hist["innings_pitched"].sum()
-            prior_k  = prior_season_hist["strikeouts"].sum()
+        prior_ip = prior_season_hist["innings_pitched"].sum()
+        prior_k  = prior_season_hist["strikeouts"].sum()
+
+        prior_starts_this_season = len(season_hist)
+
+        # =========================
+        # FIX: EARLY-SEASON K/9 LOGIC
+        # =========================
+        if prior_starts_this_season < 5:
             if prior_ip <= 0:
-                skipped_rows.append({"pitcher_name": pitcher_name,
-                                     "reason": f"no usable pitcher K/9 history for {target_season} or {prior_season}"})
+                skipped_rows.append({
+                    "pitcher_name": pitcher_name,
+                    "reason": f"no usable prior-season pitcher K/9 history"
+                })
                 continue
             season_k_per_9 = (prior_k / prior_ip) * 9
+        else:
+            if season_ip > 0:
+                season_k_per_9 = (season_k / season_ip) * 9
+            elif prior_ip > 0:
+                season_k_per_9 = (prior_k / prior_ip) * 9
+            else:
+                skipped_rows.append({
+                    "pitcher_name": pitcher_name,
+                    "reason": f"no usable pitcher K/9 history"
+                })
+                continue
 
+        # =========================
+        # OPPONENT K%
+        # =========================
         opponent = row["opponent"]
 
         opp_cur = hist_prior[
@@ -170,7 +192,7 @@ def build_live_features(live_df, hist_df, target_date):
             (hist_prior["opponent"] == opponent)
         ]
         opp_bf_c = opp_cur["batters_faced"].sum()
-        opp_k_c = opp_cur["strikeouts"].sum()
+        opp_k_c  = opp_cur["strikeouts"].sum()
 
         if opp_bf_c > 0:
             opponent_k_pct = (opp_k_c + LEAGUE_K_PCT * STABILIZER_BF) / (opp_bf_c + STABILIZER_BF)
@@ -180,32 +202,42 @@ def build_live_features(live_df, hist_df, target_date):
                 (hist_prior["opponent"] == opponent)
             ]
             opp_bf_p = opp_pri["batters_faced"].sum()
-            opp_k_p = opp_pri["strikeouts"].sum()
+            opp_k_p  = opp_pri["strikeouts"].sum()
 
             if opp_bf_p <= 0:
                 skipped_rows.append({
                     "pitcher_name": pitcher_name,
-                    "reason": f"no usable opponent K% history for {opponent} in {target_season} or {prior_season}"
+                    "reason": f"no usable opponent K% history for {opponent}"
                 })
                 continue
 
             opponent_k_pct = (opp_k_p + LEAGUE_K_PCT * STABILIZER_BF) / (opp_bf_p + STABILIZER_BF)
 
+        # =========================
+        # BUILD FEATURE ROW
+        # =========================
         feature_rows.append({
-            "date": pd.to_datetime(target_date), "season": target_season,
-            "game_pk": row["game_pk"], "pitcher_id": int(pitcher_id),
-            "pitcher_name": pitcher_name, "team": row["team"],
-            "opponent": opponent, "home_away": int(row["home_away"]),
+            "date": pd.to_datetime(target_date),
+            "season": target_season,
+            "game_pk": row["game_pk"],
+            "pitcher_id": int(pitcher_id),
+            "pitcher_name": pitcher_name,
+            "team": row["team"],
+            "opponent": opponent,
+            "home_away": int(row["home_away"]),
             "rolling_K_last_5":             last_5["strikeouts"].mean(),
             "rolling_IP_last_5":            last_5["innings_pitched"].mean(),
             "rolling_batters_faced_last_5": last_5["batters_faced"].mean(),
             "season_K_per_9":  season_k_per_9,
             "opponent_k_pct":  opponent_k_pct,
             "prior_starts_total":       len(pitcher_hist),
-            "prior_starts_this_season": len(season_hist),
+            "prior_starts_this_season": prior_starts_this_season,
         })
 
-    return pd.DataFrame(feature_rows), pd.DataFrame(skipped_rows)
+    features_df = pd.DataFrame(feature_rows)
+    skipped_df  = pd.DataFrame(skipped_rows)
+
+    return features_df, skipped_df
 
 def load_and_parse_sportsbook_lines(target_date):
     if not os.path.exists(SPORTSBOOK_LINES_PATH):
