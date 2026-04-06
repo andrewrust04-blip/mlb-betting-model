@@ -1,8 +1,4 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-04-05,2026,823729,607259,Nick Martinez,TB,MIN,1,4.5,over,120.0,0.575,0.4545,0.1205,5.165,5.247,5,2.582,1.5,0.55,,,,False
-2026-04-05,2026,824620,641778,Eric Lauer,TOR,CWS,1,4.5,over,100.0,0.588,0.5,0.088,5.457,5.37,5,2.64,1.0,0.44,,,,False
-2026-04-05,2026,824379,592836,Taijuan Walker,PHI,COL,1,3.5,over,-106.0,0.6,0.5146,0.0854,4.331,4.251,4,2.289,1.0,0.44,,,,False
-2026-04-05,2026,824053,622491,Luis Castillo,SEA,LAA,1,5.5,under,128.0,0.518,0.4386,0.0794,5.702,5.601,5,2.776,1.0,0.35,,,,False
-2026-04-05,2026,822917,683004,Jack Leiter,TEX,CIN,0,6.5,under,-146.0,0.659,0.5935,0.0655,5.601,5.614,5,2.683,0.5,0.4,,,,False
-2026-04-05,2026,824296,672456,Keider Montero,DET,STL,0,3.5,over,108.0,0.546,0.4808,0.0652,3.968,3.979,4,2.185,0.5,0.31,,,,False
-2026-04-05,2026,823729,680573,Simeon Woods Richardson,MIN,TB,0,4.5,over,106.0,0.547,0.4854,0.0616,5.027,5.117,5,2.592,0.5,0.3,,,,False
+2026-04-06,2026,823728,657746,Joe Ryan,MIN,DET,0,6.5,under,-132.0,0.72,0.569,0.151,5.221,5.184,5,2.568,2.0,0.88,,,,False
+2026-04-06,2026,823728,663554,Casey Mize,DET,MIN,1,4.5,over,-160.0,0.708,0.6154,0.0926,6.298,6.115,6,2.717,1.0,0.6,,,,False
+2026-04-06,2026,822755,669467,Andre Pallante,STL,WSH,1,3.5,over,-112.0,0.614,0.5283,0.0857,4.355,4.439,4,2.338,1.0,0.45,,,,False
