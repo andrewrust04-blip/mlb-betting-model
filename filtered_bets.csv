@@ -1,4 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-04-09,2026,823884,676974,Max Meyer,MIA,CIN,0,5.5,under,-102.0,0.653,0.505,0.148,4.816,4.822,5,2.37,1.5,0.75,,,,False
 2026-04-09,2026,823724,656427,Jack Flaherty,DET,MIN,1,5.5,under,112.0,0.542,0.4717,0.0703,5.418,5.485,5,2.606,0.5,0.33,,,,False
-2026-04-09,2026,823645,690997,Nolan McLean,NYM,AZ,0,5.5,over,-125.0,0.615,0.5556,0.0594,6.497,6.551,6,2.988,0.5,0.33,,,,False
+2026-04-09,2026,823645,690997,Nolan McLean,NYM,AZ,0,5.5,over,-122.0,0.615,0.5495,0.0655,6.497,6.551,6,2.988,0.5,0.36,,,,False
