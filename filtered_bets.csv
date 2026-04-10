@@ -1,3 +1,10 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-04-09,2026,823724,656427,Jack Flaherty,DET,MIN,1,5.5,under,112.0,0.542,0.4717,0.0703,5.418,5.485,5,2.606,0.5,0.33,,,,False
-2026-04-09,2026,823645,690997,Nolan McLean,NYM,AZ,0,5.5,over,-122.0,0.615,0.5495,0.0655,6.497,6.551,6,2.988,0.5,0.36,,,,False
+2026-04-10,2026,822997,571927,Steven Matz,TB,NYY,0,4.5,over,104.0,0.671,0.4902,0.1808,5.795,5.864,6,2.683,2.0,0.89,,,,False
+2026-04-10,2026,824695,684007,Shota Imanaga,CHC,PIT,0,5.5,under,104.0,0.652,0.4902,0.1618,4.815,4.816,5,2.375,2.0,0.79,,,,False
+2026-04-10,2026,824941,693821,Bryce Elder,ATL,CLE,0,4.5,over,110.0,0.598,0.4762,0.1218,5.484,5.419,5,2.697,1.5,0.58,,,,False
+2026-04-10,2026,822829,680573,Simeon Woods Richardson,MIN,TOR,1,3.5,over,-154.0,0.724,0.6063,0.1177,5.206,5.233,5,2.638,1.5,0.75,,,,False
+2026-04-10,2026,824858,669358,Shane Baz,BAL,SF,0,5.5,under,-132.0,0.67,0.569,0.101,4.584,4.603,4,2.437,1.5,0.59,,,,False
+2026-04-10,2026,824128,663436,Davis Martin,CWS,KC,1,3.5,over,-118.0,0.641,0.5413,0.0997,4.654,4.55,4,2.395,1.0,0.54,,,,False
+2026-04-10,2026,823808,663623,Jake Irvin,WSH,MIL,1,4.5,over,124.0,0.522,0.4464,0.0756,4.956,4.982,5,2.564,1.0,0.34,,,,False
+2026-04-10,2026,824128,663460,Kris Bubic,KC,CWS,0,5.5,under,-114.0,0.589,0.5327,0.0563,5.274,5.253,5,2.497,0.5,0.3,,,,False
+2026-04-10,2026,823808,694477,Chad Patrick,MIL,WSH,0,4.5,under,110.0,0.532,0.4762,0.0558,4.44,4.479,4,2.218,0.5,0.27,,,,False
