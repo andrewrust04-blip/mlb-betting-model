@@ -1,6 +1,7 @@
 # pull_props_github.py
 # Pull MLB pitcher strikeout props using The Odds API
-# Optimized to use ONE odds request per run (instead of looping through every event)
+# Optimized to use ONE odds request per run
+# UPDATED: writes empty file (headers only) if API fails or no props
 
 import os
 import requests
@@ -20,11 +21,10 @@ REGIONS = "us"
 MARKETS = "pitcher_strikeouts"
 ODDS_FORMAT = "american"
 DATE_FORMAT = "iso"
-TARGET_BOOKMAKER = "fanduel"   # Odds API bookmaker key, not display name
+TARGET_BOOKMAKER = "fanduel"
 
 OUTPUT_PATH = f"{BASE_DIR}/sportsbook_lines.csv"
 
-# Single-call odds endpoint
 ODDS_URL = f"https://api.the-odds-api.com/v4/sports/{SPORT}/odds"
 
 params = {
@@ -36,37 +36,66 @@ params = {
     "bookmakers": TARGET_BOOKMAKER,
 }
 
-print("Fetching MLB pitcher strikeout props in one request...")
-response = requests.get(ODDS_URL, params=params, timeout=30)
+# ============================
+# HELPER: WRITE EMPTY FILE
+# ============================
 
-print(f"Status code: {response.status_code}")
+def write_empty_props_file():
+    empty_df = pd.DataFrame(columns=[
+        "date",
+        "bookmaker",
+        "player_name",
+        "line",
+        "side",
+        "odds"
+    ])
+    empty_df.to_csv(OUTPUT_PATH, index=False)
+    print(f"Wrote EMPTY sportsbook lines file → {OUTPUT_PATH}")
 
 # ============================
-# FAIL SAFELY — DO NOT OVERWRITE OLD FILE
+# API CALL
+# ============================
+
+print("Fetching MLB pitcher strikeout props...")
+
+try:
+    response = requests.get(ODDS_URL, params=params, timeout=30)
+    print(f"Status code: {response.status_code}")
+except Exception as e:
+    print(f"API request failed: {e}")
+    write_empty_props_file()
+    raise SystemExit(0)
+
+# ============================
+# FAIL SAFE: BAD STATUS
 # ============================
 
 if response.status_code != 200:
     print("Props pull failed.")
     print(f"Response text: {response.text}")
-    print(f"Keeping existing file unchanged: {OUTPUT_PATH}")
+    write_empty_props_file()
     raise SystemExit(0)
+
+# ============================
+# PARSE JSON
+# ============================
 
 try:
     data = response.json()
 except Exception as e:
     print(f"Failed to parse JSON response: {e}")
-    print(f"Keeping existing file unchanged: {OUTPUT_PATH}")
+    write_empty_props_file()
     raise SystemExit(0)
 
 if not isinstance(data, list) or len(data) == 0:
     print("Odds API returned no events.")
-    print(f"Keeping existing file unchanged: {OUTPUT_PATH}")
+    write_empty_props_file()
     raise SystemExit(0)
 
 print(f"Found {len(data)} events in odds response")
 
 # ============================
-# PARSE DATA
+# PARSE PROPS
 # ============================
 
 all_props = []
@@ -78,8 +107,15 @@ for event in data:
     if not bookmakers:
         continue
 
-    # Convert event start time to Eastern date for your workflow / dashboard
-    event_date = pd.to_datetime(commence_time, utc=True).tz_convert("America/New_York").strftime("%Y-%m-%d")
+    # Convert to NY date
+    try:
+        event_date = (
+            pd.to_datetime(commence_time, utc=True)
+            .tz_convert("America/New_York")
+            .strftime("%Y-%m-%d")
+        )
+    except:
+        continue
 
     for book in bookmakers:
         book_key = str(book.get("key", "")).lower()
@@ -90,16 +126,14 @@ for event in data:
         book_title = book.get("title", "FanDuel")
 
         for market in book.get("markets", []):
-            market_key = str(market.get("key", "")).lower()
-
-            if market_key != MARKETS:
+            if str(market.get("key", "")).lower() != MARKETS:
                 continue
 
             for outcome in market.get("outcomes", []):
                 player_name = outcome.get("description")
                 line = outcome.get("point")
                 odds = outcome.get("price")
-                side = outcome.get("name")  # Over / Under
+                side = outcome.get("name")
 
                 if pd.isna(player_name) or pd.isna(line) or pd.isna(odds) or pd.isna(side):
                     continue
@@ -114,31 +148,38 @@ for event in data:
                 })
 
 # ============================
-# SAVE ONLY IF VALID DATA EXISTS
+# BUILD DATAFRAME
 # ============================
 
 df = pd.DataFrame(all_props)
 
 if df.empty:
-    print("No valid FanDuel pitcher strikeout props found.")
-    print(f"Keeping existing file unchanged: {OUTPUT_PATH}")
+    print("No valid props found.")
+    write_empty_props_file()
     raise SystemExit(0)
 
 # Clean types
 df["line"] = pd.to_numeric(df["line"], errors="coerce")
 df["odds"] = pd.to_numeric(df["odds"], errors="coerce")
+
 df = df.dropna(subset=["player_name", "line", "side", "odds"]).copy()
 
 if df.empty:
-    print("Props file became empty after cleaning.")
-    print(f"Keeping existing file unchanged: {OUTPUT_PATH}")
+    print("Props empty after cleaning.")
+    write_empty_props_file()
     raise SystemExit(0)
 
+# Sort for consistency
 df = df.sort_values(["date", "player_name", "line", "side"]).reset_index(drop=True)
+
+# ============================
+# SAVE FILE
+# ============================
 
 print("\nSample props:")
 print(df.head(10).to_string(index=False))
 
 df.to_csv(OUTPUT_PATH, index=False)
+
 print(f"\nSaved sportsbook lines to: {OUTPUT_PATH}")
 print("pull_props_github.py complete.")
