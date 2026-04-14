@@ -336,7 +336,31 @@ const fmtEdge  = v => { const n=parseFloat(v); return isNaN(n)?'—':(n*100).toF
 const fmtOdds  = v => { const n=parseInt(v);   return isNaN(n)?'—':(n>0?'+':'')+n; };
 const fmtNum   = (v,dp=2) => { const n=parseFloat(v); return isNaN(n)?'—':n.toFixed(dp); };
 const fmtPL    = v => { const n=parseFloat(v); return isNaN(n)?'—':(n>=0?'+':'')+n.toFixed(2)+'u'; };
-const fmtDate  = v => { if(!v||v==='None')return'—'; const d=new Date(v); return isNaN(d)?v:d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); };
+const fmtDate = v => {
+  if (!v || v === 'None') return '—';
+
+  const s = String(v).trim();
+
+  // Handle plain YYYY-MM-DD safely as local date
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+    const [y, m, d] = s.split('-').map(Number);
+    const localDate = new Date(y, m - 1, d);
+    return localDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
+  const parsed = new Date(s);
+  return isNaN(parsed)
+    ? s
+    : parsed.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+};
 const isDash   = v => !v||v==='None'||v==='none'||v==='nan'||v===''||v===null||v===undefined;
 
 function edgeBadge(raw) {
