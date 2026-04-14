@@ -12,6 +12,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import os
+import re
 import pickle
 import requests
 import unicodedata
@@ -48,6 +49,13 @@ TEAM_ABBR_MAP = {
     "Texas Rangers": "TEX", "Toronto Blue Jays": "TOR", "Washington Nationals": "WSH",
 }
 
+# Manual cleanup for known problem names
+MANUAL_NAME_ALIASES = {
+    # Add trouble cases here over time, for example:
+    # "luis l ortiz": "luis ortiz",
+    # "aj smith shawver": "a j smith shawver",
+    # "matthew boyd": "matt boyd",
+}
 
 # Stabilized opponent K%
 LEAGUE_K_PCT = 0.22
@@ -60,9 +68,33 @@ STABILIZER_BF = 200
 def normalize_name(name):
     if pd.isna(name):
         return ""
+
     name = str(name).strip().lower()
     name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("utf-8")
-    return " ".join(name.split())
+
+    # Replace punctuation/apostrophes/hyphens/etc with spaces
+    name = re.sub(r"[^\w\s]", " ", name)
+
+    # Collapse repeated whitespace
+    name = " ".join(name.split())
+
+    # Remove common suffixes
+    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
+    parts = [p for p in name.split() if p not in suffixes]
+
+    # Remove single-letter middle initials, but keep first and last names
+    if len(parts) >= 3:
+        cleaned = [parts[0]]
+        cleaned.extend([p for p in parts[1:-1] if len(p) > 1])
+        cleaned.append(parts[-1])
+        parts = cleaned
+
+    name = " ".join(parts)
+
+    # Apply manual alias cleanup
+    name = MANUAL_NAME_ALIASES.get(name, name)
+
+    return name
 
 def american_odds_to_implied(odds):
     odds = float(odds)
@@ -283,8 +315,7 @@ def load_and_parse_sportsbook_lines(target_date):
         print("sportsbook_lines.csv is missing the 'date' column.")
         return pd.DataFrame()
 
-    # New pull_props_github.py already saves NY-date strings like YYYY-MM-DD.
-    # Do NOT force UTC here or dates can shift incorrectly.
+    # pull_props_github.py saves NY-date strings like YYYY-MM-DD.
     lines["date"] = pd.to_datetime(lines["date"], errors="coerce").dt.normalize()
     target_dt = pd.to_datetime(target_date).normalize()
 
