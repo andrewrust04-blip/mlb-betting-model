@@ -1,7 +1,7 @@
 # pull_props_github.py
 # Pull MLB pitcher strikeout props using The Odds API
-# Optimized to use ONE odds request per run
-# UPDATED: writes empty file (headers only) if API fails or no props
+# UPDATED: uses events endpoint + event-odds endpoint for player props
+# Writes empty file (headers only) if API fails or no props
 
 import os
 import requests
@@ -25,16 +25,12 @@ TARGET_BOOKMAKER = "fanduel"
 
 OUTPUT_PATH = f"{BASE_DIR}/sportsbook_lines.csv"
 
-ODDS_URL = f"https://api.the-odds-api.com/v4/sports/{SPORT}/odds"
+EVENTS_URL = f"https://api.the-odds-api.com/v4/sports/{SPORT}/events"
 
-params = {
-    "apiKey": API_KEY,
-    "regions": REGIONS,
-    "markets": MARKETS,
-    "oddsFormat": ODDS_FORMAT,
-    "dateFormat": DATE_FORMAT,
-    "bookmakers": TARGET_BOOKMAKER,
-}
+# Player props must be pulled per event:
+# /v4/sports/{sport}/events/{eventId}/odds
+def event_odds_url(event_id):
+    return f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{event_id}/odds"
 
 # ============================
 # HELPER: WRITE EMPTY FILE
@@ -50,76 +46,119 @@ def write_empty_props_file():
         "odds"
     ])
     empty_df.to_csv(OUTPUT_PATH, index=False)
-    print(f"Wrote EMPTY sportsbook lines file → {OUTPUT_PATH}")
+    print(f"Wrote EMPTY sportsbook lines file -> {OUTPUT_PATH}")
 
 # ============================
-# API CALL
+# HELPER: SAFE GET
 # ============================
 
-print("Fetching MLB pitcher strikeout props...")
+def safe_get(url, params, timeout=30):
+    try:
+        response = requests.get(url, params=params, timeout=timeout)
+        return response
+    except Exception as e:
+        print(f"Request failed for {url}: {e}")
+        return None
+
+# ============================
+# STEP 1: GET EVENTS
+# ============================
+
+print("Fetching MLB events...")
+
+events_params = {
+    "apiKey": API_KEY,
+    "dateFormat": DATE_FORMAT,
+}
+
+events_response = safe_get(EVENTS_URL, events_params, timeout=30)
+
+if events_response is None:
+    write_empty_props_file()
+    raise SystemExit(0)
+
+print(f"Events status code: {events_response.status_code}")
+
+if events_response.status_code != 200:
+    print("Events pull failed.")
+    print(f"Response text: {events_response.text}")
+    write_empty_props_file()
+    raise SystemExit(0)
 
 try:
-    response = requests.get(ODDS_URL, params=params, timeout=30)
-    print(f"Status code: {response.status_code}")
+    events_data = events_response.json()
 except Exception as e:
-    print(f"API request failed: {e}")
+    print(f"Failed to parse events JSON: {e}")
     write_empty_props_file()
     raise SystemExit(0)
 
-# ============================
-# FAIL SAFE: BAD STATUS
-# ============================
-
-if response.status_code != 200:
-    print("Props pull failed.")
-    print(f"Response text: {response.text}")
+if not isinstance(events_data, list) or len(events_data) == 0:
+    print("No MLB events returned.")
     write_empty_props_file()
     raise SystemExit(0)
 
-# ============================
-# PARSE JSON
-# ============================
-
-try:
-    data = response.json()
-except Exception as e:
-    print(f"Failed to parse JSON response: {e}")
-    write_empty_props_file()
-    raise SystemExit(0)
-
-if not isinstance(data, list) or len(data) == 0:
-    print("Odds API returned no events.")
-    write_empty_props_file()
-    raise SystemExit(0)
-
-print(f"Found {len(data)} events in odds response")
+print(f"Found {len(events_data)} MLB events")
 
 # ============================
-# PARSE PROPS
+# STEP 2: GET PROPS FOR EACH EVENT
 # ============================
 
 all_props = []
+successful_event_calls = 0
 
-for event in data:
+for event in events_data:
+    event_id = event.get("id")
     commence_time = event.get("commence_time")
-    bookmakers = event.get("bookmakers", [])
 
+    if not event_id:
+        continue
+
+    odds_params = {
+        "apiKey": API_KEY,
+        "regions": REGIONS,
+        "markets": MARKETS,
+        "oddsFormat": ODDS_FORMAT,
+        "dateFormat": DATE_FORMAT,
+        "bookmakers": TARGET_BOOKMAKER,
+    }
+
+    response = safe_get(event_odds_url(event_id), odds_params, timeout=30)
+
+    if response is None:
+        print(f"Skipping event {event_id}: request failed")
+        continue
+
+    print(f"Event {event_id} status code: {response.status_code}")
+
+    if response.status_code != 200:
+        print(f"Skipping event {event_id}: bad status")
+        print(f"Response text: {response.text}")
+        continue
+
+    try:
+        event_data = response.json()
+    except Exception as e:
+        print(f"Skipping event {event_id}: JSON parse failed: {e}")
+        continue
+
+    successful_event_calls += 1
+
+    bookmakers = event_data.get("bookmakers", [])
     if not bookmakers:
         continue
 
-    # Convert to NY date
+    # Convert event start time to NY date
     try:
         event_date = (
             pd.to_datetime(commence_time, utc=True)
             .tz_convert("America/New_York")
             .strftime("%Y-%m-%d")
         )
-    except:
+    except Exception:
         continue
 
     for book in bookmakers:
         book_key = str(book.get("key", "")).lower()
-
         if book_key != TARGET_BOOKMAKER:
             continue
 
@@ -147,18 +186,20 @@ for event in data:
                     "odds": odds
                 })
 
+print(f"Successful event-odds calls: {successful_event_calls}")
+print(f"Raw props collected: {len(all_props)}")
+
 # ============================
-# BUILD DATAFRAME
+# STEP 3: BUILD DATAFRAME
 # ============================
 
 df = pd.DataFrame(all_props)
 
 if df.empty:
-    print("No valid props found.")
+    print("No valid pitcher strikeout props found.")
     write_empty_props_file()
     raise SystemExit(0)
 
-# Clean types
 df["line"] = pd.to_numeric(df["line"], errors="coerce")
 df["odds"] = pd.to_numeric(df["odds"], errors="coerce")
 
@@ -169,11 +210,10 @@ if df.empty:
     write_empty_props_file()
     raise SystemExit(0)
 
-# Sort for consistency
 df = df.sort_values(["date", "player_name", "line", "side"]).reset_index(drop=True)
 
 # ============================
-# SAVE FILE
+# STEP 4: SAVE FILE
 # ============================
 
 print("\nSample props:")
