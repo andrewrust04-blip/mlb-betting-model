@@ -434,6 +434,9 @@ X_live_scaled = scaler.transform(X_live)
 X_live_nb     = sm.add_constant(X_live_scaled, has_constant="add")
 mu_live       = np.asarray(nb_model.predict(X_live_nb))
 
+# --- MEAN CORRECTION (bias adjustment) ---
+mu_live = mu_live * 0.95
+
 print(f"\nRunning {N_SIMS:,} simulations per live pitcher...")
 rng   = np.random.default_rng(seed=42)
 draws = simulate_nb_draws(mu_live, NB_ALPHA, N_SIMS, SIM_CLIP_MAX, rng)
