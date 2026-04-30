@@ -690,6 +690,8 @@ function renderBreakdown(elId, rows) {
   function renderCalibration(rows) {
   const el = document.getElementById('calibration-table');
 
+  console.log("CALIBRATION DATA:", rows);
+
   if (!rows || !rows.length) {
     el.innerHTML = '<p class="no-data" style="padding:14px 16px">No calibration data.</p>';
     return;
@@ -705,17 +707,24 @@ function renderBreakdown(elId, rows) {
       </tr>
     </thead>
     <tbody>
-      ${rows.map(r => `
-        <tr>
-          <td>${r.prob_bucket || '—'}</td>
-          <td>${r.bets || '—'}</td>
-          <td>${r.wins || '—'}</td>
-          <td>${r.win_rate ? (parseFloat(r.win_rate)*100).toFixed(1)+'%' : '—'}</td>
-        </tr>
-      `).join('')}
+      ${rows.map(r => {
+        const bucket = r.prob_bucket || r["prob_bucket"];
+        const bets   = r.bets || r["bets"];
+        const wins   = r.wins || r["wins"];
+        const wr     = r.win_rate || r["win_rate"];
+
+        return `
+          <tr>
+            <td>${bucket || '—'}</td>
+            <td>${bets || '—'}</td>
+            <td>${wins || '—'}</td>
+            <td>${!isNaN(parseFloat(wr)) ? (parseFloat(wr)*100).toFixed(1)+'%' : '—'}</td>
+          </tr>
+        `;
+      }).join('')}
     </tbody>
   </table>`;
-}
+}}
 
 // ══════════════════════════════════════════
 // BET LOG
