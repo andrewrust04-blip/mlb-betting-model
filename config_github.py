@@ -13,12 +13,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Intermediate dataset saved by build_dataset.py, loaded by train_model.py
 DATASET_PATH = os.path.join(BASE_DIR, "pitcher_game_features.parquet")
 
-# Predictions saved by train_model.py, loaded by betting_report.py
-PREDICTIONS_PATH = os.path.join(BASE_DIR, "predictions.parquet")
-
-# Final betting report saved by betting_report.py
-REPORT_PATH = os.path.join(BASE_DIR, "betting_report.csv")
-
 # Saved model objects from train_model.py
 MODEL_PATH = os.path.join(BASE_DIR, "nb_model.pkl")
 SCALER_PATH = os.path.join(BASE_DIR, "scaler.pkl")
