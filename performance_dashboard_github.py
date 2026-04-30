@@ -363,4 +363,7 @@ edge_summary.to_csv("dashboard_by_edge.csv", index=False)
 # ---- BY SIDE ----
 side_summary.to_csv("dashboard_by_side.csv", index=False)
 
+# ---- CALIBRATION ----
+calibration_table.to_csv("dashboard_calibration.csv", index=False)
+
 print("\nSaved dashboard CSV files for Streamlit.")
