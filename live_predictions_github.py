@@ -517,33 +517,43 @@ if not lines_wide.empty:
                 implied_col = f"implied_{side}_{label}"
                 edge_col    = f"edge_{side}_{label}"
                 prob_col    = f"p_{side}_{label}"
-
+    
                 if odds_col not in betting_df.columns or edge_col not in betting_df.columns:
                     continue
-
+    
                 edge_val = row.get(edge_col, np.nan)
-                if pd.notna(edge_val) and edge_val >= BET_EDGE_THRESHOLD and pd.notna(row.get(odds_col, np.nan)):
-                    bet_rows.append({
-                        "date": row["date"],
-                        "season": row["season"],
-                        "game_pk": row["game_pk"],
-                        "pitcher_id": row["pitcher_id"],
-                        "pitcher_name": row["pitcher_name"],
-                        "team": row["team"],
-                        "opponent": row["opponent"],
-                        "home_away": row["home_away"],
-                        "line": float(line),
-                        "bet_side": side,
-                        "odds": row.get(odds_col, np.nan),
-                        "model_prob": row.get(prob_col, np.nan),
-                        "implied_prob": row.get(implied_col, np.nan),
-                        "edge": edge_val,
-                        "predicted_mean": row["predicted_mean"],
-                        "simulated_mean": row["simulated_mean"],
-                        "simulated_median": row["simulated_median"],
-                        "simulated_std": row["simulated_std"],
-                    })
-
+                odds_val = row.get(odds_col, np.nan)
+    
+                if pd.notna(edge_val) and pd.notna(odds_val):
+    
+                    # --- SIDE-SPECIFIC EDGE THRESHOLDS ---
+                    if side == "over":
+                        threshold = 0.12
+                    else:  # under
+                        threshold = 0.08
+    
+                    if edge_val >= threshold:
+                        bet_rows.append({
+                            "date": row["date"],
+                            "season": row["season"],
+                            "game_pk": row["game_pk"],
+                            "pitcher_id": row["pitcher_id"],
+                            "pitcher_name": row["pitcher_name"],
+                            "team": row["team"],
+                            "opponent": row["opponent"],
+                            "home_away": row["home_away"],
+                            "line": float(line),
+                            "bet_side": side,
+                            "odds": odds_val,
+                            "model_prob": row.get(prob_col, np.nan),
+                            "implied_prob": row.get(implied_col, np.nan),
+                            "edge": edge_val,
+                            "predicted_mean": row["predicted_mean"],
+                            "simulated_mean": row["simulated_mean"],
+                            "simulated_median": row["simulated_median"],
+                            "simulated_std": row["simulated_std"],
+                        })
+    
     filtered_bets = pd.DataFrame(bet_rows)
 
     if not filtered_bets.empty:
