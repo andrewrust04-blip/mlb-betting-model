@@ -435,7 +435,7 @@ X_live_nb     = sm.add_constant(X_live_scaled, has_constant="add")
 mu_live       = np.asarray(nb_model.predict(X_live_nb))
 
 # --- MEAN CORRECTION (bias adjustment) ---
-mu_live = mu_live * 0.95
+mu_live = mu_live * 0.975
 
 print(f"\nRunning {N_SIMS:,} simulations per live pitcher...")
 rng   = np.random.default_rng(seed=42)
