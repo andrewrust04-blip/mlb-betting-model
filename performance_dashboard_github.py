@@ -298,6 +298,38 @@ print(
     .to_string(index=False, float_format=lambda x: f"{x:.3f}")
 )
 
+
+# =============================================================================
+# CALIBRATION ANALYSIS
+# =============================================================================
+
+print("\n=== CALIBRATION (MODEL PROB vs ACTUAL WIN RATE) ===")
+
+# Only use bets that have a result
+calib_df = df[df["bet_result"].isin(["win", "loss"])].copy()
+
+if calib_df.empty:
+    print("No settled bets available for calibration.")
+else:
+    # Create probability buckets
+    bins = [0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80]
+    labels = ["50-55%", "55-60%", "60-65%", "65-70%", "70-75%", "75-80%"]
+
+    calib_df["prob_bucket"] = pd.cut(calib_df["model_prob"], bins=bins, labels=labels)
+
+    calibration_table = (
+        calib_df.groupby("prob_bucket")
+        .agg(
+            bets=("model_prob", "count"),
+            wins=("bet_result", lambda x: (x == "win").sum())
+        )
+        .reset_index()
+    )
+
+    calibration_table["win_rate"] = calibration_table["wins"] / calibration_table["bets"]
+
+    print(calibration_table.to_string(index=False, float_format=lambda x: f"{x:.3f}"))
+
 print("\nperformance_dashboard.py complete.")
 
 # =============================================================================
