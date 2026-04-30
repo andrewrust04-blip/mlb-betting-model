@@ -27,7 +27,6 @@ from config_github import (
     SPORTSBOOK_LINES_PATH, LIVE_PREDICTIONS_PATH, FILTERED_BETS_PATH,
     BET_LOG_PATH, BET_EDGE_THRESHOLD, ALLOW_MULTIPLE_BETS_PER_PITCHER,
 )
-from export_excel_github import export_filtered_bets, export_bet_log
 
 # =============================================================================
 # CONFIG
@@ -637,18 +636,6 @@ if not lines_wide.empty:
         updated_bet_log.to_csv(BET_LOG_PATH, index=False)
         print(f"Updated bet log saved to: {BET_LOG_PATH}")
 
-        # =====================================================================
-        # EXCEL EXPORTS
-        # =====================================================================
-        try:
-            export_filtered_bets(filtered_bets)
-        except Exception as e:
-            print(f"Warning: filtered_bets.xlsx export failed: {e}")
-
-        try:
-            export_bet_log(updated_bet_log)
-        except Exception as e:
-            print(f"Warning: bet_log.xlsx export failed: {e}")
 
     else:
         print(f"\nNo bets met the edge threshold of {BET_EDGE_THRESHOLD:.1%}.")
@@ -656,12 +643,6 @@ if not lines_wide.empty:
         filtered_bets.to_csv(FILTERED_BETS_PATH, index=False)
         print(f"Saved EMPTY filtered bets to: {FILTERED_BETS_PATH}")
 
-        try:
-            export_filtered_bets(filtered_bets)
-        except Exception as e:
-            print(f"Warning: empty filtered_bets.xlsx export failed: {e}")
-
-        print("Bet log not updated because there were no qualifying bets.")
 
 else:
     print("\nNo valid sportsbook lines for today. Treating as no-props day.")
@@ -669,12 +650,6 @@ else:
     filtered_bets.to_csv(FILTERED_BETS_PATH, index=False)
     print(f"Saved EMPTY filtered bets to: {FILTERED_BETS_PATH}")
 
-    try:
-        export_filtered_bets(filtered_bets)
-    except Exception as e:
-        print(f"Warning: empty filtered_bets.xlsx export failed: {e}")
-
-    print("Bet log not updated because no valid current-day props were available.")
 
 print("\n=== CLEAN LIVE BETTING VIEW ===")
 print(betting_df.head(25).to_string(index=False, float_format=lambda x: f"{x:.3f}"))
