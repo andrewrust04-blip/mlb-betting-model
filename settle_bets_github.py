@@ -18,7 +18,6 @@ except ImportError:
     raise ImportError("Run: pip install pybaseball")
 
 from config_github import BET_LOG_PATH
-from export_excel_github import export_bet_log
 
 # =============================================================================
 # HELPERS
@@ -209,13 +208,5 @@ print(
     .to_string(index=False, float_format=lambda x: f"{x:.3f}")
 )
 
-# =============================================================================
-# EXCEL EXPORT
-# =============================================================================
-
-try:
-    export_bet_log(bet_log)
-except Exception as e:
-    print(f"Warning: bet_log.xlsx export failed: {e}")
 
 print("\nsettle_bets.py complete.")
