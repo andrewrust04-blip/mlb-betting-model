@@ -40,9 +40,6 @@ jobs:
     - name: Run live predictions
       run: python live_predictions_github.py
 
-    - name: Export Excel files
-      run: python export_excel_github.py
-
     - name: Run performance dashboard
       run: python performance_dashboard_github.py
 
