@@ -250,21 +250,6 @@ tbody td.dim{color:var(--text-3)}
       </div>
     </div>
     
-    <!-- NEW: Calibration Section -->
-    <div class="gap-lg"></div>
-    
-    <div class="sec-head">
-      <span class="sec-label">Calibration (Model vs Actual)</span>
-      <span class="sec-line"></span>
-    </div>
-    
-    <div class="breakdown-card">
-      <div class="breakdown-card-head">Probability Calibration</div>
-      <div class="table-wrap" style="border:none;border-radius:0" id="calibration-table">
-        <div class="loading"><span class="spinner"></span></div>
-      </div>
-    </div>
-    
     </div>
 
   
@@ -330,7 +315,6 @@ const FILES = {
   byLine:       "dashboard_by_line.csv",
   byEdge:       "dashboard_by_edge.csv",
   bySide:       "dashboard_by_side.csv",
-  calibration:  "dashboard_calibration.csv",
 };
 
 // ══════════════════════════════════════════
@@ -687,44 +671,6 @@ function renderBreakdown(elId, rows) {
   </table>`;
 }
 
-  function renderCalibration(rows) {
-  const el = document.getElementById('calibration-table');
-
-  console.log("CALIBRATION DATA:", rows);
-
-  if (!rows || !rows.length) {
-    el.innerHTML = '<p class="no-data" style="padding:14px 16px">No calibration data.</p>';
-    return;
-  }
-
-  el.innerHTML = `<table>
-    <thead>
-      <tr>
-        <th>Prob Bucket</th>
-        <th>Bets</th>
-        <th>Wins</th>
-        <th>Win Rate</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${rows.map(r => {
-        const bucket = r.prob_bucket || r["prob_bucket"];
-        const bets   = r.bets || r["bets"];
-        const wins   = r.wins || r["wins"];
-        const wr     = r.win_rate || r["win_rate"];
-
-        return `
-          <tr>
-            <td>${bucket || '—'}</td>
-            <td>${bets || '—'}</td>
-            <td>${wins || '—'}</td>
-            <td>${!isNaN(parseFloat(wr)) ? (parseFloat(wr)*100).toFixed(1)+'%' : '—'}</td>
-          </tr>
-        `;
-      }).join('')}
-    </tbody>
-  </table>`;
-}}
 
 // ══════════════════════════════════════════
 // BET LOG
@@ -813,14 +759,13 @@ async function init() {
     '📅 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 
   // Fetch all CSVs in parallel
-  const [betLog, filteredBets, summary, byLine, byEdge, bySide, calibration] = await Promise.allSettled([
+  const [betLog, filteredBets, summary, byLine, byEdge, bySide] = await Promise.allSettled([
   fetchCSV(BASE+FILES.betLog),
   fetchCSV(BASE+FILES.filteredBets),
   fetchCSV(BASE+FILES.summary),
   fetchCSV(BASE+FILES.byLine),
   fetchCSV(BASE+FILES.byEdge),
   fetchCSV(BASE+FILES.bySide),
-  fetchCSV(BASE+FILES.calibration),
 ]);
 
   DATA.betLog       = betLog.status==='fulfilled'       ? betLog.value       : [];
@@ -829,7 +774,6 @@ async function init() {
   DATA.byLine       = byLine.status==='fulfilled'       ? byLine.value       : [];
   DATA.byEdge       = byEdge.status==='fulfilled'       ? byEdge.value       : [];
   DATA.bySide       = bySide.status==='fulfilled'       ? bySide.value       : [];
-  DATA.calibration  = calibration.status==='fulfilled' ? calibration.value : [];
 
   // Header pill
   document.getElementById('pill-bets').textContent = `🎯 ${DATA.filteredBets.length} bets today`;
@@ -841,7 +785,6 @@ async function init() {
   renderBreakdown('breakdown-line', DATA.byLine);
   renderBreakdown('breakdown-edge', DATA.byEdge);
   renderBreakdown('breakdown-side', DATA.bySide);
-  renderCalibration(DATA.calibration);
   populateLogFilters(DATA.betLog);
   renderLog();
 }
