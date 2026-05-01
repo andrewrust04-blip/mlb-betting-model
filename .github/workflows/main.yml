@@ -41,7 +41,7 @@ jobs:
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git add pitcher_game_features.parquet
+        git add pitcher_game_features.parquet sportsbook_lines.csv historical_lines.csv
         git commit -m "Update dataset"
         git push
 
