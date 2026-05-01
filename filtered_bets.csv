@@ -1,6 +1,6 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
 2026-05-01,2026,823146,693433,Bryan Woo,SEA,KC,0,5.5,under,-108.0,0.754,0.5192,0.2348,4.141,4.097,4,2.213,2.0,1.22,,,,False
-2026-05-01,2026,822990,663556,Shane McClanahan,TB,SF,0,5.5,under,-140.0,0.69,0.5833,0.1067,4.612,4.614,4,2.391,1.5,0.64,,,,False
+2026-05-01,2026,822990,663556,Shane McClanahan,TB,SF,0,5.5,under,-138.0,0.69,0.5798,0.1102,4.612,4.614,4,2.391,1.5,0.66,,,,False
 2026-05-01,2026,823146,666142,Cole Ragans,KC,SEA,1,6.5,under,100.0,0.606,0.5,0.106,6.145,6.036,6,2.847,1.5,0.53,,,,False
 2026-05-01,2026,823389,656605,Mitch Keller,PIT,CIN,0,4.5,under,106.0,0.583,0.4854,0.0976,4.402,4.313,4,2.362,1.0,0.47,,,,False
-2026-05-01,2026,823877,691587,Eury Pérez,MIA,PHI,0,5.5,under,-138.0,0.667,0.5798,0.0872,4.597,4.623,4,2.474,1.0,0.52,,,,False
+2026-05-01,2026,823877,691587,Eury Pérez,MIA,PHI,0,5.5,under,-136.0,0.667,0.5763,0.0907,4.597,4.623,4,2.474,1.0,0.54,,,,False
