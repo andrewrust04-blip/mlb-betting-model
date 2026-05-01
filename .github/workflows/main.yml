@@ -37,6 +37,14 @@ jobs:
     - name: Update dataset
       run: python update_dataset_github.py
 
+    - name: Commit and push updated dataset
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add pitcher_game_features.parquet
+        git commit -m "Update dataset"
+        git push
+
     - name: Run live predictions
       run: python live_predictions_github.py
 
