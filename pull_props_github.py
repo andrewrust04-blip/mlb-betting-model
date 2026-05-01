@@ -205,5 +205,19 @@ print("\nSample props:")
 print(df.head(10).to_string(index=False))
 
 df.to_csv(OUTPUT_PATH, index=False)
+
+# ============================
+# STEP 5: SAVE HISTORICAL FILE
+# ============================
+
+HISTORICAL_PATH = f"{BASE_DIR}/historical_lines.csv"
+
+# append mode
+if os.path.exists(HISTORICAL_PATH):
+    df.to_csv(HISTORICAL_PATH, mode="a", header=False, index=False)
+else:
+    df.to_csv(HISTORICAL_PATH, index=False)
+
+print(f"Appended to historical file: {HISTORICAL_PATH}")
 print(f"\nSaved to: {OUTPUT_PATH}")
 print("pull_props_github.py complete.")
