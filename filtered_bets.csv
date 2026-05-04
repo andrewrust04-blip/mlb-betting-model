@@ -1,4 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-03,2026,823387,695505,Chase Burns,CIN,PIT,0,6.5,over,-132.0,0.745,0.569,0.176,8.67,8.849,9,3.366,1.5,1.02,,,,False
-2026-05-03,2026,822987,571927,Steven Matz,TB,SF,1,4.5,over,104.0,0.666,0.4902,0.1758,5.723,5.83,6,2.766,1.5,0.86,,,,False
-2026-05-03,2026,825013,800048,Parker Messick,CLE,ATH,0,5.5,over,-120.0,0.648,0.5455,0.1025,6.952,6.935,7,3.084,0.5,0.56,,,,False
+2026-05-04,2026,824201,808967,Yoshinobu Yamamoto,LAD,HOU,0,5.5,under,118.0,0.565,0.4587,0.1063,5.093,5.187,5,2.592,0.5,0.49,,,,False
