@@ -1,3 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-06,2026,825091,647336,Michael Soroka,AZ,PIT,1,5.5,over,102.0,0.609,0.495,0.114,6.34,6.447,6,2.846,0.5,0.56,,,,False
-2026-05-06,2026,824118,666142,Cole Ragans,KC,CLE,1,6.5,over,114.0,0.576,0.4673,0.1087,7.412,7.332,7,3.124,0.5,0.51,,,,False
+2026-05-07,2026,824362,681035,Christian Scott,NYM,COL,0,4.5,over,108.0,0.61,0.4808,0.1292,5.404,5.587,5,2.765,1.0,0.62,,,,False
