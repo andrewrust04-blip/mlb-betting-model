@@ -1,2 +1,4 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-07,2026,824362,681035,Christian Scott,NYM,COL,0,4.5,over,108.0,0.61,0.4808,0.1292,5.404,5.587,5,2.765,1.0,0.62,,,,False
+2026-05-08,2026,822904,676962,Ben Brown,CHC,TEX,0,3.5,over,112.0,0.635,0.4717,0.1633,4.57,4.568,4,2.356,1.5,0.77,,,,False
+2026-05-08,2026,823794,608331,Max Fried,NYY,MIL,0,5.5,under,104.0,0.635,0.4902,0.1448,4.888,4.893,5,2.471,1.0,0.71,,,,False
+2026-05-08,2026,825088,690997,Nolan McLean,NYM,AZ,0,5.5,over,-122.0,0.676,0.5495,0.1265,7.145,7.107,7,3.046,1.0,0.7,,,,False
