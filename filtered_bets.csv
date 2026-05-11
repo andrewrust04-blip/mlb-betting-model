@@ -1,1 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
+2026-05-11,2026,823953,808963,Roki Sasaki,LAD,SF,1,4.5,under,-166.0,0.787,0.6241,0.1629,3.243,3.206,3,1.878,1.5,1.08,,,,False
