@@ -1,2 +1,5 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-11,2026,823953,808963,Roki Sasaki,LAD,SF,1,4.5,under,-166.0,0.787,0.6241,0.1629,3.243,3.206,3,1.878,1.5,1.08,,,,False
+2026-05-12,2026,824197,693433,Bryan Woo,SEA,HOU,0,5.5,under,104.0,0.718,0.4902,0.2278,4.431,4.344,4,2.281,2.0,1.12,,,,False
+2026-05-12,2026,823790,663362,Matt Waldron,SD,MIL,0,3.5,under,118.0,0.655,0.4587,0.1963,2.975,2.935,3,1.838,1.5,0.91,,,,False
+2026-05-12,2026,822903,668678,Zac Gallen,AZ,TEX,0,4.5,under,-112.0,0.64,0.5283,0.1117,4.011,3.985,4,2.195,0.5,0.59,,,,False
+2026-05-12,2026,822903,669022,MacKenzie Gore,TEX,AZ,1,5.5,over,116.0,0.565,0.463,0.102,6.148,6.237,6,2.837,0.5,0.47,,,,False
