@@ -1,3 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-15,2026,824360,607536,Kyle Freeland,COL,AZ,1,3.5,over,118.0,0.636,0.4587,0.1773,4.54,4.551,4,2.411,1.5,0.82,,,,False
-2026-05-15,2026,824194,683004,Jack Leiter,TEX,HOU,0,5.5,under,118.0,0.606,0.4587,0.1473,5.141,5.111,5,2.464,1.0,0.68,,,,False
+2026-05-16,2026,824193,594798,Jacob deGrom,TEX,HOU,0,7.5,under,-148.0,0.724,0.5968,0.1272,5.944,6.071,6,3.026,1.0,0.79,,,,False
