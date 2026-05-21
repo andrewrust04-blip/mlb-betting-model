@@ -1,3 +1,1 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-20,2026,822977,571927,Steven Matz,TB,BAL,1,4.5,over,116.0,0.605,0.463,0.142,5.278,5.34,5,2.611,1.0,0.66,,,,False
-2026-05-20,2026,823057,669387,Carmen Mlodzinski,PIT,STL,0,4.5,under,-130.0,0.676,0.5652,0.1108,3.798,3.751,4,2.192,0.5,0.64,,,,False
