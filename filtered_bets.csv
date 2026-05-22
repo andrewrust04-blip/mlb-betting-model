@@ -1,1 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
+2026-05-22,2026,824761,801139,Payton Tolle,BOS,MIN,1,5.5,under,-104.0,0.612,0.5098,0.1022,5.066,5.093,5,2.585,0.5,0.52,,,,False
