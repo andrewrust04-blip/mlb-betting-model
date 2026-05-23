@@ -1,2 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-22,2026,824761,801139,Payton Tolle,BOS,MIN,1,5.5,under,-104.0,0.612,0.5098,0.1022,5.066,5.093,5,2.585,0.5,0.52,,,,False
+2026-05-23,2026,823787,808963,Roki Sasaki,LAD,MIL,0,4.5,under,126.0,0.768,0.4425,0.3255,3.339,3.322,3,1.974,2.0,1.46,,,,False
+2026-05-23,2026,824760,671737,Taj Bradley,MIN,BOS,0,4.5,over,124.0,0.548,0.4464,0.1016,5.064,5.071,5,2.546,0.5,0.46,,,,False
