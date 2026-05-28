@@ -1,3 +1,1 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-05-27,2026,824104,702070,Noah Cameron,KC,NYY,1,4.5,over,-108.0,0.635,0.5192,0.1158,5.618,5.643,5,2.691,0.5,0.6,,,,False
-2026-05-27,2026,822897,594798,Jacob deGrom,TEX,HOU,1,6.5,under,-105.0,0.627,0.5122,0.1148,6.008,5.851,6,2.744,0.5,0.59,,,,False
