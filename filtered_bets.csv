@@ -1,2 +1,1 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-03,2026,824188,694973,Paul Skenes,PIT,HOU,0,6.5,under,118.0,0.588,0.4587,0.1293,6.251,6.143,6,2.842,1.0,0.6,,,,False
