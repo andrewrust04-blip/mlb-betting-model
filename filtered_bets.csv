@@ -1,1 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
+2026-06-10,2026,824428,800048,Parker Messick,CLE,NYY,1,5.5,over,106.0,0.671,0.4854,0.1856,7.029,7.028,7,3.038,1.5,0.9,,,,False
