@@ -1,3 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-15,2026,824181,678906,Kai-Wei Teng,HOU,DET,1,5.5,over,132.0,0.639,0.431,0.208,6.757,6.876,7,2.904,2.0,0.91,,,,False
-2026-06-15,2026,825071,700712,Walbert Ureña,LAA,AZ,0,4.5,over,118.0,0.559,0.4587,0.1003,5.0,5.029,5,2.438,0.5,0.46,,,,False
+2026-06-16,2026,823775,688107,Robert Gasser,MIL,CLE,1,5.5,under,-162.0,0.802,0.6183,0.1837,3.882,3.79,4,2.128,1.5,1.2,,,,False
+2026-06-16,2026,823535,543037,Gerrit Cole,NYY,CWS,1,5.5,under,-106.0,0.663,0.5146,0.1484,4.777,4.759,5,2.43,1.0,0.76,,,,False
