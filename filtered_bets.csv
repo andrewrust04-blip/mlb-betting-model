@@ -1,3 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-16,2026,823775,688107,Robert Gasser,MIL,CLE,1,5.5,under,-162.0,0.802,0.6183,0.1837,3.882,3.79,4,2.128,1.5,1.2,,,,False
-2026-06-16,2026,823535,543037,Gerrit Cole,NYY,CWS,1,5.5,under,-106.0,0.663,0.5146,0.1484,4.777,4.759,5,2.43,1.0,0.76,,,,False
+2026-06-17,2026,823774,668909,Gavin Williams,CLE,MIL,0,6.5,under,-118.0,0.723,0.5413,0.1817,5.359,5.271,5,2.573,1.5,0.99,,,,False
