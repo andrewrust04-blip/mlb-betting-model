@@ -1,5 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-20,2026,824180,681293,Spencer Arrighetti,HOU,CLE,1,5.5,under,114.0,0.618,0.4673,0.1507,4.984,5.0,5,2.456,1.5,0.71,,,,False
-2026-06-20,2026,824988,700712,Walbert Ureña,LAA,ATH,0,3.5,over,-144.0,0.736,0.5902,0.1458,5.149,5.196,5,2.534,1.0,0.89,,,,False
-2026-06-20,2026,823126,813349,Connelly Early,BOS,SEA,0,5.5,under,124.0,0.578,0.4464,0.1316,5.184,5.255,5,2.567,1.0,0.59,,,,False
-2026-06-20,2026,823447,650911,Cristopher Sánchez,PHI,NYM,1,7.5,under,-144.0,0.695,0.5902,0.1048,6.6,6.429,6,2.802,0.5,0.64,,,,False
+2026-06-21,2026,824177,678906,Kai-Wei Teng,HOU,CLE,1,5.5,over,-104.0,0.647,0.5098,0.1372,6.81,6.892,7,2.996,1.0,0.7,,,,False
+2026-06-21,2026,823123,801139,Payton Tolle,BOS,SEA,0,5.5,under,136.0,0.548,0.4237,0.1243,5.508,5.474,5,2.598,0.5,0.54,,,,False
