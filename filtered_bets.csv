@@ -1,3 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-21,2026,824177,678906,Kai-Wei Teng,HOU,CLE,1,5.5,over,-104.0,0.647,0.5098,0.1372,6.81,6.892,7,2.996,1.0,0.7,,,,False
-2026-06-21,2026,823123,801139,Payton Tolle,BOS,SEA,0,5.5,under,136.0,0.548,0.4237,0.1243,5.508,5.474,5,2.598,0.5,0.54,,,,False
+2026-06-22,2026,824261,543037,Gerrit Cole,NYY,DET,0,5.5,under,-114.0,0.689,0.5327,0.1563,4.617,4.602,4,2.411,1.5,0.84,,,,False
