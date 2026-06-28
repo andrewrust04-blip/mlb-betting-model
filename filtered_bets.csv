@@ -1,4 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-27,2026,824015,672282,Reid Detmers,LAA,ATH,1,6.5,under,128.0,0.624,0.4386,0.1854,5.843,5.857,6,2.784,1.5,0.83,,,,False
-2026-06-27,2026,824257,678906,Kai-Wei Teng,HOU,DET,0,5.5,over,124.0,0.616,0.4464,0.1696,6.445,6.422,6,2.825,1.5,0.77,,,,False
-2026-06-27,2026,824745,687562,Jake Bennett,BOS,NYY,1,4.5,over,118.0,0.561,0.4587,0.1023,5.069,5.173,5,2.561,0.5,0.47,,,,False
+2026-06-28,2026,823204,519242,Chris Sale,ATL,SF,0,7.5,under,118.0,0.674,0.4587,0.2153,6.406,6.375,6,2.822,2.0,0.99,,,,False
