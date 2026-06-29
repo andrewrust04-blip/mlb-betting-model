@@ -1,2 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-28,2026,823204,519242,Chris Sale,ATL,SF,0,7.5,under,118.0,0.674,0.4587,0.2153,6.406,6.375,6,2.822,2.0,0.99,,,,False
+2026-06-29,2026,823771,666157,Nick Lodolo,CIN,MIL,0,4.5,under,-102.0,0.605,0.505,0.1,4.33,4.249,4,2.261,0.5,0.51,,,,False
