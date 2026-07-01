@@ -1,3 +1,1 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-06-30,2026,824984,680736,Justin Wrobleski,LAD,ATH,0,4.5,under,118.0,0.672,0.4587,0.2133,3.782,3.824,4,2.042,2.0,0.99,,,,False
-2026-06-30,2026,824096,643377,Griffin Jax,TB,KC,0,4.5,under,112.0,0.63,0.4717,0.1583,4.032,3.964,4,2.178,1.5,0.75,,,,False
