@@ -1,3 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-05,2026,823117,702056,Trey Yesavage,TOR,SEA,0,5.5,under,114.0,0.605,0.4673,0.1377,5.095,5.091,5,2.462,1.0,0.65,,,,False
-2026-07-05,2026,824091,679883,Luinder Avila,KC,PHI,1,4.5,over,138.0,0.556,0.4202,0.1358,5.034,5.013,5,2.434,1.0,0.59,,,,False
+2026-07-06,2026,824900,625643,Reynaldo López,ATL,NYM,1,4.5,under,-132.0,0.744,0.569,0.175,3.281,3.279,3,1.999,1.5,1.02,,,,False
+2026-07-06,2026,824089,650911,Cristopher Sánchez,PHI,KC,0,6.5,under,-113.0,0.635,0.5305,0.1045,5.821,5.838,6,2.759,0.5,0.56,,,,False
