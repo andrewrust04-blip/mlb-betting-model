@@ -1,3 +1,5 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-06,2026,824900,625643,Reynaldo López,ATL,NYM,1,4.5,under,-132.0,0.744,0.569,0.175,3.281,3.279,3,1.999,1.5,1.02,,,,False
-2026-07-06,2026,824089,650911,Cristopher Sánchez,PHI,KC,0,6.5,under,-113.0,0.635,0.5305,0.1045,5.821,5.838,6,2.759,0.5,0.56,,,,False
+2026-07-07,2026,823607,607625,Seth Lugo,KC,NYM,0,4.5,under,104.0,0.667,0.4902,0.1768,3.817,3.73,3,2.112,1.5,0.87,,,,False
+2026-07-07,2026,824254,669373,Tarik Skubal,DET,ATH,1,8.5,under,-142.0,0.749,0.5868,0.1622,6.747,6.593,6,3.044,1.5,0.98,,,,False
+2026-07-07,2026,824579,801139,Payton Tolle,BOS,CWS,0,5.5,under,104.0,0.619,0.4902,0.1288,4.968,4.97,5,2.5,1.0,0.63,,,,False
+2026-07-07,2026,822881,667755,José Soriano,LAA,TEX,0,5.5,under,-128.0,0.672,0.5614,0.1106,4.893,4.804,4,2.442,0.5,0.63,,,,False
