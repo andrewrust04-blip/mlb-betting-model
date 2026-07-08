@@ -1,5 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-07,2026,823607,607625,Seth Lugo,KC,NYM,0,4.5,under,104.0,0.667,0.4902,0.1768,3.817,3.73,3,2.112,1.5,0.87,,,,False
-2026-07-07,2026,824254,669373,Tarik Skubal,DET,ATH,1,8.5,under,-142.0,0.749,0.5868,0.1622,6.747,6.593,6,3.044,1.5,0.98,,,,False
-2026-07-07,2026,824579,801139,Payton Tolle,BOS,CWS,0,5.5,under,104.0,0.619,0.4902,0.1288,4.968,4.97,5,2.5,1.0,0.63,,,,False
-2026-07-07,2026,822881,667755,José Soriano,LAA,TEX,0,5.5,under,-128.0,0.672,0.5614,0.1106,4.893,4.804,4,2.442,0.5,0.63,,,,False
+2026-07-08,2026,823928,808963,Roki Sasaki,LAD,COL,1,5.5,under,-106.0,0.67,0.5146,0.1554,4.457,4.5,4,2.312,1.5,0.8,,,,False
+2026-07-08,2026,822957,543037,Gerrit Cole,NYY,TB,0,5.5,under,-150.0,0.71,0.6,0.11,4.518,4.414,4,2.314,0.5,0.69,,,,False
