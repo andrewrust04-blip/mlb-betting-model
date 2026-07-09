@@ -1,3 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-08,2026,823928,808963,Roki Sasaki,LAD,COL,1,5.5,under,-106.0,0.67,0.5146,0.1554,4.457,4.5,4,2.312,1.5,0.8,,,,False
-2026-07-08,2026,822957,543037,Gerrit Cole,NYY,TB,0,5.5,under,-150.0,0.71,0.6,0.11,4.518,4.414,4,2.314,0.5,0.69,,,,False
+2026-07-09,2026,822877,672282,Reid Detmers,LAA,TEX,0,6.5,under,-140.0,0.684,0.5833,0.1007,5.461,5.455,5,2.619,0.5,0.6,,,,False
