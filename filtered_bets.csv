@@ -1,2 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-09,2026,822877,672282,Reid Detmers,LAA,TEX,0,6.5,under,-140.0,0.684,0.5833,0.1007,5.461,5.455,5,2.619,0.5,0.6,,,,False
+2026-07-10,2026,824493,668881,Hunter Greene,CIN,CHC,1,6.5,over,100.0,0.607,0.5,0.107,7.646,7.7,7,3.233,0.5,0.53,,,,False
+2026-07-10,2026,823604,543243,Sonny Gray,BOS,NYM,0,5.5,under,100.0,0.605,0.5,0.105,5.132,5.029,5,2.563,0.5,0.52,,,,False
