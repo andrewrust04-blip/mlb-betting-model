@@ -1,1 +1,4 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
+2026-07-17,2026,823524,808963,Roki Sasaki,LAD,NYY,0,4.5,under,124.0,0.611,0.4464,0.1646,4.053,4.094,4,2.217,1.5,0.74,,,,False
+2026-07-17,2026,824414,683003,Jared Jones,PIT,CLE,0,5.5,under,-120.0,0.71,0.5455,0.1645,4.348,4.393,4,2.365,1.5,0.91,,,,False
+2026-07-17,2026,824901,519242,Chris Sale,ATL,TEX,1,7.5,under,-138.0,0.71,0.5798,0.1302,6.216,6.125,6,2.845,1.0,0.77,,,,False
