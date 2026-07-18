@@ -1,4 +1,5 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-17,2026,823524,808963,Roki Sasaki,LAD,NYY,0,4.5,under,124.0,0.611,0.4464,0.1646,4.053,4.094,4,2.217,1.5,0.74,,,,False
-2026-07-17,2026,824414,683003,Jared Jones,PIT,CLE,0,5.5,under,-120.0,0.71,0.5455,0.1645,4.348,4.393,4,2.365,1.5,0.91,,,,False
-2026-07-17,2026,824901,519242,Chris Sale,ATL,TEX,1,7.5,under,-138.0,0.71,0.5798,0.1302,6.216,6.125,6,2.845,1.0,0.77,,,,False
+2026-07-18,2026,824331,695076,Rhett Lowder,CIN,COL,0,3.5,over,132.0,0.653,0.431,0.222,4.537,4.705,4,2.437,2.0,0.98,,,,False
+2026-07-18,2026,824414,683003,Jared Jones,PIT,CLE,0,4.5,under,132.0,0.589,0.431,0.158,4.297,4.241,4,2.254,1.5,0.69,,,,False
+2026-07-18,2026,823763,676974,Max Meyer,MIA,MIL,0,5.5,under,-106.0,0.624,0.5146,0.1094,4.911,4.918,5,2.451,0.5,0.56,,,,False
+2026-07-18,2026,824169,681293,Spencer Arrighetti,HOU,BAL,1,5.5,under,116.0,0.571,0.463,0.108,5.337,5.275,5,2.591,0.5,0.5,,,,False
