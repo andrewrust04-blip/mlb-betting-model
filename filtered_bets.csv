@@ -1,8 +1,7 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-19,2026,823764,691587,Eury Pérez,MIA,MIL,0,5.5,under,128.0,0.619,0.4386,0.1804,5.064,5.014,5,2.526,1.5,0.8,,,,False
-2026-07-19,2026,824411,694973,Paul Skenes,PIT,CLE,0,6.5,under,126.0,0.598,0.4425,0.1555,6.242,6.125,6,2.714,1.5,0.7,,,,False
-2026-07-19,2026,824739,663556,Shane McClanahan,TB,BOS,0,4.5,under,120.0,0.599,0.4545,0.1445,4.216,4.199,4,2.262,1.0,0.66,,,,False
-2026-07-19,2026,822786,702056,Trey Yesavage,TOR,CWS,1,5.5,under,106.0,0.623,0.4854,0.1376,5.002,5.002,5,2.462,1.0,0.67,,,,False
-2026-07-19,2026,824168,687064,Brandon Young,BAL,HOU,0,4.5,under,-108.0,0.64,0.5192,0.1208,4.097,3.964,4,2.129,0.5,0.63,,,,False
-2026-07-19,2026,824653,684007,Shota Imanaga,CHC,MIN,1,5.5,under,-128.0,0.678,0.5614,0.1166,4.712,4.703,4,2.364,0.5,0.66,,,,False
-2026-07-19,2026,824168,686613,Hunter Brown,HOU,BAL,1,6.5,under,122.0,0.556,0.4505,0.1055,6.142,6.318,6,2.907,0.5,0.48,,,,False
+2026-07-20,2026,823112,669923,George Kirby,SEA,CIN,1,6.5,under,110.0,0.624,0.4762,0.1478,5.775,5.835,6,2.643,1.0,0.71,,,,False
+2026-07-20,2026,824167,669854,Ronel Blanco,HOU,MIA,1,3.5,over,-148.0,0.723,0.5968,0.1262,5.237,5.193,5,2.587,1.0,0.78,,,,False
+2026-07-20,2026,824410,676440,Tanner Bibee,CLE,MIN,1,4.5,under,-106.0,0.625,0.5146,0.1104,4.09,4.055,4,2.195,0.5,0.57,,,,False
+2026-07-20,2026,823762,642547,Freddy Peralta,NYM,MIL,0,5.5,under,-132.0,0.677,0.569,0.108,4.761,4.643,4,2.475,0.5,0.63,,,,False
+2026-07-20,2026,823762,694819,Jacob Misiorowski,MIL,NYM,1,8.5,under,112.0,0.576,0.4717,0.1043,8.163,8.03,8,3.207,0.5,0.49,,,,False
+2026-07-20,2026,823112,671096,Andrew Abbott,CIN,SEA,0,4.5,under,120.0,0.557,0.4545,0.1025,4.438,4.41,4,2.235,0.5,0.47,,,,False
