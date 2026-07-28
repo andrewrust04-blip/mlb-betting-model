@@ -1,2 +1,3 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-27,2026,824490,695505,Chase Burns,CIN,CLE,1,6.5,over,114.0,0.601,0.4673,0.1337,7.492,7.532,7,3.098,1.0,0.63,,,,False
+2026-07-28,2026,822703,676917,Cade Cavalli,WSH,TOR,1,4.5,over,118.0,0.604,0.4587,0.1453,5.48,5.358,5,2.557,1.0,0.67,,,,False
+2026-07-28,2026,823598,519242,Chris Sale,ATL,NYM,0,7.5,under,-148.0,0.722,0.5968,0.1252,6.025,6.052,6,2.778,1.0,0.78,,,,False
