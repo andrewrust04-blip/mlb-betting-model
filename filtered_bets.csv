@@ -1,3 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-28,2026,822703,676917,Cade Cavalli,WSH,TOR,1,4.5,over,118.0,0.604,0.4587,0.1453,5.48,5.358,5,2.557,1.0,0.67,,,,False
-2026-07-28,2026,823598,519242,Chris Sale,ATL,NYM,0,7.5,under,-148.0,0.722,0.5968,0.1252,6.025,6.052,6,2.778,1.0,0.78,,,,False
+2026-07-29,2026,823598,519242,Chris Sale,ATL,NYM,0,7.5,under,-122.0,0.752,0.5495,0.2025,5.954,5.836,6,2.702,2.0,1.12,,,,False
