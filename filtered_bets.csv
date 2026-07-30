@@ -1,2 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-07-29,2026,823598,519242,Chris Sale,ATL,NYM,0,7.5,under,-122.0,0.752,0.5495,0.2025,5.954,5.836,6,2.702,2.0,1.12,,,,False
+2026-07-30,2026,823921,808963,Roki Sasaki,LAD,SEA,1,5.5,under,-128.0,0.707,0.5614,0.1456,4.388,4.338,4,2.29,1.0,0.83,,,,False
