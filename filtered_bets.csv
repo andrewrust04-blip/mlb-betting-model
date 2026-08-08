@@ -1,2 +1,4 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-08-07,2026,825051,808963,Roki Sasaki,LAD,AZ,0,4.5,under,116.0,0.653,0.463,0.19,3.767,3.852,4,2.058,1.5,0.88,,,,False
+2026-08-08,2026,823514,519242,Chris Sale,ATL,NYY,0,7.5,under,-102.0,0.675,0.505,0.17,6.548,6.538,6,2.85,1.5,0.86,,,,False
+2026-08-08,2026,823752,688107,Robert Gasser,MIL,MIN,1,4.5,under,-113.0,0.644,0.5305,0.1135,4.075,3.891,4,2.211,0.5,0.6,,,,False
+2026-08-08,2026,823752,671737,Taj Bradley,MIN,MIL,0,5.5,under,128.0,0.541,0.4386,0.1024,5.519,5.449,5,2.61,0.5,0.46,,,,False
