@@ -1,3 +1,1 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-08-15,2026,823990,677976,Randy Dobnak,KC,LAA,0,3.5,over,132.0,0.694,0.431,0.263,4.701,4.78,5,2.369,2.0,1.16,,,,False
-2026-08-15,2026,823914,694819,Jacob Misiorowski,MIL,LAD,0,8.5,under,-102.0,0.614,0.505,0.109,7.99,7.888,8,3.193,0.5,0.55,,,,False
