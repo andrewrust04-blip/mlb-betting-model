@@ -1,2 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-08-18,2026,823749,682243,Bryce Miller,SEA,MIL,0,5.5,under,-125.0,0.656,0.5556,0.1004,4.717,4.761,4,2.518,0.5,0.57,,,,False
+2026-08-19,2026,823424,645261,Sandy Alcantara,MIA,PHI,0,4.5,over,128.0,0.541,0.4386,0.1024,5.024,5.113,5,2.548,0.5,0.46,,,,False
