@@ -1,5 +1,1 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-08-23,2026,823909,605483,Blake Snell,LAD,PIT,1,8.5,under,-113.0,0.688,0.5305,0.1575,7.203,7.166,7,2.969,1.5,0.84,,,,False
-2026-08-23,2026,823421,681517,Kyle Leahy,STL,PHI,0,3.5,over,-132.0,0.714,0.569,0.145,5.003,5.1,5,2.598,1.0,0.84,,,,False
-2026-08-23,2026,822856,615698,Cal Quantrill,TEX,LAA,1,3.5,over,-125.0,0.698,0.5556,0.1424,5.01,4.967,5,2.516,1.0,0.8,,,,False
-2026-08-23,2026,823421,650911,Cristopher Sánchez,PHI,STL,1,6.5,under,112.0,0.574,0.4717,0.1023,6.121,6.144,6,2.856,0.5,0.48,,,,False
