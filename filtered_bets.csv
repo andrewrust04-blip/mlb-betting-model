@@ -1,1 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
+2026-08-28,2026,822769,676106,Emerson Hancock,SEA,TOR,0,3.5,over,-122.0,0.656,0.5495,0.1065,4.599,4.657,4,2.466,0.5,0.59,,,,False
