@@ -1,2 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
-2026-09-21,2026,824787,702056,Trey Yesavage,TOR,BAL,0,3.5,over,134.0,0.729,0.4274,0.3016,5.238,5.249,5,2.596,2.0,1.32,,,,False
+2026-09-22,2026,823412,669160,Dustin May,MIL,PHI,0,3.5,over,104.0,0.64,0.4902,0.1498,4.532,4.569,4,2.415,1.0,0.73,,,,False
