@@ -1,1 +1,2 @@
 date,season,game_pk,pitcher_id,pitcher_name,team,opponent,home_away,line,bet_side,odds,model_prob,implied_prob,edge,predicted_mean,simulated_mean,simulated_median,simulated_std,recommended_units,kelly_units,actual_strikeouts,bet_result,profit_units,settled
+2026-10-23,2026,849805,694819,Jacob Misiorowski,MIL,TB,1,6.5,under,104.0,0.61,0.4902,0.1198,6.041,5.977,6,2.794,0.5,0.59,,,,False
